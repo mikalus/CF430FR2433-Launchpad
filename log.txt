@@ -1,0 +1,153 @@
+
+-----------------------------------------------------------------------
+
+-- MSP-EXP430FR2433 Experimenter Board unterstützen ?
+
+-- Schreibschutz für den Kern ?
+PROTECT testet ob eine Adresse ok ist - ob das so gut ist?
+
+-----------------------------------------------------------------------
+
+-- 04.06.2018 Version für den MSP430F5739 lief ohne große Änderungen auf MSP430FR2433
+InfoB statt InfoA, Memorymap angepasst.
+
+-- 17.02.2012:
+FORGET und TASK eingeführt.
+Dazu FIND-NAME ausfaktorisiert aus FIND.
+Uservariable FENCE eingefügt.
+FORGET geht nicht unter FENCE,
+Fehlermeldung falls Wort nicht existiert.
+
+infoB Segment dazu genommen; 
+files: infoB.s43
+Darin user area angelegt, bleibt also auch nach power down bestehen.
+in hilvlv angefügt:
+COLD lädt initCOLD aus infoA in die userarea. 
+default ist initCOLD = initDECON (deliverd condition).
+COLD startet CF430FR im Lieferzustand.
+WARM setzt nur stacks.
+reset geht über WARM.
+
+User variable APP ermöglicht  ' <word> APP !
+WARM macht damit APP @ EXECUTE 
+
+TRUE FALSE NOOP und DEFER IS [IS]
+magic count CLIP lässt eine kleien LED demo laufen. 
+
+
+****  CF430FR machen *************************************************
+
+-- 20.1.2012 fertig zur Abgabe an R. (Version für den MSP430F5739)----------------------------------
+
+-- 18.1.2012 Vergleich CF430FR mit CF/Z80 angestellt - code ok.
+QUIT xon/xoff geht nicht mit TeraTerm, schreibt in Puffer, 
+und der reagiert nicht auf xoff.
+Kommentare überarbeitet.
+
+-- 14.1.2012
+Kommentare in den files ueberarbeitet.
+.S gforth style.
+MARKER getestet, ok.
+CREATE DOES> getestet, ok.
+
+-- 13.1.2012
+STORE ist aligned auf ADR-1. Das führte zum Fehler im GN' 0' beim anstest.
+ALIGNN am Anfang von HEADER eingefuegt. 
+Nun laeuft der core.fr Test im anstest0.8 fehlerfrei durch.
+300ms Zeilenverzoegerung in TeraTerm taten es auch.
+
+Carsten Strotmanns benchmarks ebenfalls bestanden.
+
+-- 11.1.2012
+anstest0.8 von Garry Jackson auf CF430FR angewendet.
+CF konnte die tabs nicht verarbeiten. 
+In den Quellen Tabs durch blanks ersetzt - automatisch per subetaedit.
+tester.fr ergänzt um:
+ 0 CONSTANT FALSE 
+-1 CONSTANT TRUE 
+tester.fr läd nun ohne Fehler.
+Damit core.fr geladen.
+Mit Zeilenverzögerung 100ms gehts gut durch bis zum Abschnitt:
+TESTING <# # #S #> HOLD SIGN BASE >NUMBER HEX DECIMAL
+Dort steigt CF aus beim G1 Test.
+Zeilenverzögerung im terminal auf 500ms erhöht.
+Dann gehts durch bis G7 ohne Fehler.
+
+- Die >NUMBER TESTS scheitern dann:
+T{ 0 0 GN' 0' >NUMBER -> 0 0 GN-CONSUMED }T   
+geht schief weil CF das  GN' 0' nicht kann.
+
+-- 9.1.2012
+Build Stempel in .ID eingefügt.
+Hinweis im readme korrigiert: musste heißen "Linker configuration file"
+
+-- 01.01.2012
+Warning[w29]: Parts of segment DATA16_N are initialized (as in module init430FR5739), even though it is of type  
+DATA (and thus not promable) 
+init tabelle aus init entfernt, denn die ist ja hilvl definiert.
+statt dessen
+UP:     DS16    1                   ; User Pointer
+UAREA:  DS16    UAREA_SIZE          ; see: hilvl tabel for COLD
+dort hin geschrieben. Nun auch dort keine Warnung mehr.
+
+Warning[w2]: Symbol _STACK_SIZE is redefined in command-line 
+Warning[w2]: Symbol _DATA16_HEAP_SIZE is redefined in command-line 
+Diese beiden Warnungen verschwinden, wenn man an der Stelle 
+Project/Options/Categorie:Gerneral Options; Stack/Heap
+einstellt "override default" und "read from linker command file"
+
+-- 31 Dezember 2012 mk:
+Kopfinfos in allen files eingefügt.
+Überflüssigen auf flash bezogenen code gelöscht.
+
+-- 11.December 2011 mk: 
+stacks, pad, usw. wieder im RAM. tested ok.
+compilieren geht.
+!LEDS geht.
+WORDS um CR am Anfang ergänzt.
+
+-- 28 August 2011 mk:
+CREATE war noch zu sehr auf getrennten Speicher ausgelegt (SRAM und flash), und hatte ein HERE das ins RAM zeigte zusŠtzlich abgelegt. Das stšrte bei der Erzeugung von VARIABLE nicht, aber MARKER ging damit nicht.
+CREATE legt nun nur eine CELL an, und ein einfacher MARKER geht auch. 
+
+-- 24 August 2011 mk:
+added: WARM in hilvl, .ver in core; (.id nennt den Zweck, .ver die Version.)
+COLD druck nun id und version, init zum Urzustand.
+WARM druckt nur Version, setzt stack pointer, macht abort.
+
+-- 23 August 2011 mk:
+RESET klappt so nicht; wieder auskommentiert.
+Fehler im ." (dotquote). Hängt sich auf wenn der string geraden count hat.
+Adressberechnung falsch; aligned wurde adr0+n, muss jedoch auf adr1+n aligned werden. 
+fixed, nun gehts.
+
+-- 21 August 2011 mk:
+Verhalten von Reset folgendermassen geändert:
+UserVariable CLDWRM eingefügt.
+COLD wie bisher; lädt die Tabelle uinit nach U0.
+Effekt ist ein System im 'Urzustand'.
+WARM hinzugefügt. Ist ein alias von ABORT. 
+Damit werden nur S0 R0 L0 >IN und STATE zurückgesetzt. Neuer Forthcode bleibt erhalten. Auch der Zustand des boards wird nicht geŠndert.
+RESET prüft ob WARM oder COLD ausgeführt werden soll.
+Der Resetvector geht nach wie vor durch init, aber nicht mehr durch COLD wenn in CLDWRM noch $A55A steht.
+Erst Stecker ziehen beseitigt neu compilierte Forthworte.
+
+-- 20 August 2011 mk:
+Runtime docreate: und DOVAR: im core hinzugefügt, so das nun CREATE und VARIABLE funktionieren.
+Backspace im ACCEPT um space,backspace erweitert für das Terminal.
+
+-- 19 August 2011 mk:
+Linker setzte init hinter core, daher war ROMDICT=DP falsch.  
+ROMIDCT ans Ende von init verlegt. Nun ist DP richtig, siehe framforth.map: end_of_init D996 
+Im chip ist nun HERE . D996 ok
+RAMDICT wird nicht mehr benutzt.
+Neue Worte werden ins FRAM compiliert.  : test ." hallo" ;
+' test U. D99E ok
+
+-- 07 August 2011 mk:
+We have that ok prompt :-)
+Camel forth is UPPERCASE so type:
+1122 3344 .S
+to see more than a questionmark.
+Try WORDS too.
+

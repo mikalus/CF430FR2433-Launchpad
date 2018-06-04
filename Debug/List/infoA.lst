@@ -1,0 +1,124 @@
+###############################################################################
+#                                                                             #
+#     IAR Assembler V6.40.1.950/W32  for MSP430 04/Jun/2018  09:06:11         #
+#     Copyright 1996-2015 IAR Systems AB.                                     #
+#                                                                             #
+#           Target option =  MSP430X                                          #
+#           Source file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\infoA.s43#
+#           List file     =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List\infoA.lst#
+#           Object file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj\infoA.r43#
+#           Command line  =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\infoA.s43 #
+#                            -OC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj #
+#                            -s+ -M<> -w+                                     #
+#                            -LC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List #
+#                            -t8 -x -r -D__MSP430FR2433__ -v1 --data_model    #
+#                            small --code_model large                         #
+#                            -IC:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\430\INC\ #
+#                                                                             #
+###############################################################################
+
+      1    000000              ; infoA user area tables
+      2    000000              ; NOTE: Device Descriptors are stored no longer
+                                in info A segment as in MSP430G2xxx.
+      3    000000              ; So it is save to use info memory in applicatio
+                               ns.
+      4    000000              ; Device Descriptor is at 1A00h - 1A1Dh
+                                now.
+      5    000000              
+      6    000000                      EXTERN lastword,ROMDICT,fenceadr,NOOP
+      7    000000                      EXTERN DOTVER 
+      8    000000                      PUBLIC initDECON,UP1,appA0,appA1,cory,ft
+ est
+      9    000000              
+     10    000000                      RSEG    INFOA
+     11    000000 0000         UP1:     DW 0
+     12    000002                      ; user area 
+     13    000002 000000001000*        DW 0,0,16,0     ; reserved,>IN,BASE,STAT
+                                                       E
+     14    00000A ....                 DW ROMDICT      ; DP
+     15    00000C 00000000             DW 0,0          ; SOURCE init'd
+                                                        elsewhere
+     16    000010 ....                 DW lastword     ; LATEST
+     17    000012 00000000             DW 0,0          ; HP,LP init'd
+                                                        elsewhere; HP=Hold
+                                                        LP=leave stack
+                                                        pointer
+     18    000016 ....         appA1:  DW DOTVER         ; is default app
+                                                          ;mk
+     19    000018 0000                 DW 0            ; NEWEST not init'd
+     20    00001A ....                 DW fenceadr     ; FENCE for FORGET
+     21    00001C 000000000000         DW 0,0,0        ; user variables
+                                                        TBD
+     22    000022              
+     23    000022 0000         cory:   DW 0   ; cause of reset; its a copy of
+                                               SYSRSTIV done by init.
+     24    000024 0000         ftest:  DW 0
+     25    000026              
+     26    000026              ; ----------------------------------------------
+                               -----------
+     27    000026              
+     28    000026              initDECON:  ; delivery condition of user
+                                area
+     29    000026 000000001000*        DW 0,0,16,0     ; reserved,>IN,BASE,STAT
+                                                       E
+     30    00002E ....                 DW ROMDICT      ; DP
+     31    000030 00000000             DW 0,0          ; SOURCE init'd
+                                                        elsewhere
+     32    000034 ....                 DW lastword     ; LATEST
+     33    000036 00000000             DW 0,0          ; HP,LP init'd
+                                                        elsewhere; HP=Hold
+                                                        LP=leave stack
+                                                        pointer
+     34    00003A ....         appA0:  DW DOTVER         ; is default app
+                                                          ;mk
+     35    00003C 0000                 DW 0            ; NEWEST not init'd
+     36    00003E ....                 DW fenceadr     ; FENCE for FORGET
+     37    000040 000000000000         DW 0,0,0        ; user variables
+                                                        TBD
+     38    000046              
+     39    000046              
+     40    000000                      PUBLIC  CFver,CFverend
+     41    000046              
+     42    000046 35           CFver:  DB CFverend-CFver ;count
+     43    000047 434634333046*        DB 'CF430FR2433 V0.2exp',$0D,$0A
+     44    00005C 6275696C643A*        DB 'build: ',__DATE__,' ',__TIME__,$0D,$
+                                           0A
+     45    00007B 58595A       CFverend:   DB 'XYZ'
+     46    00007E                      EVEN
+     47    00007E              
+     48    00007E              
+     49    00007E              END
+
+
+
+Segment             Type 	Mode
+----------------------------------------
+INFOA               UNTYPED  	REL 
+
+Label               Mode   Type                   Segment    Value/Offset
+------------------------------------------------------------------------------
+CFver               REL    CONST PUB UNTYP.       INFOA      46 
+CFverend            REL    CONST PUB UNTYP.       INFOA      7B 
+DOTVER              ABS    CONST EXT [003] UNTYP. __EXTERNS  Solved Extern 
+NOOP                ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+ROMDICT             ABS    CONST EXT [001] UNTYP. __EXTERNS  Solved Extern 
+UP1                 REL    CONST PUB UNTYP.       INFOA      0 
+appA0               REL    CONST PUB UNTYP.       INFOA      3A 
+appA1               REL    CONST PUB UNTYP.       INFOA      16 
+cory                REL    CONST PUB UNTYP.       INFOA      22 
+fenceadr            ABS    CONST EXT [002] UNTYP. __EXTERNS  Solved Extern 
+ftest               REL    CONST PUB UNTYP.       INFOA      24 
+initDECON           REL    CONST PUB UNTYP.       INFOA      26 
+lastword            ABS    CONST EXT [000] UNTYP. __EXTERNS  Solved Extern 
+
+
+##############################
+#          CRC:2EE8          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#         Bytes: 126         #
+##############################
+
+
+
+

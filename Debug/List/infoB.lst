@@ -1,0 +1,116 @@
+###############################################################################
+#                                                                             #
+#     IAR Assembler V6.40.1.950/W32  for MSP430 04/Jun/2018  10:01:11         #
+#     Copyright 1996-2015 IAR Systems AB.                                     #
+#                                                                             #
+#           Target option =  MSP430X                                          #
+#           Source file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\infoB.s43#
+#           List file     =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List\infoB.lst#
+#           Object file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj\infoB.r43#
+#           Command line  =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\infoB.s43 #
+#                            -OC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj #
+#                            -s+ -M<> -w+                                     #
+#                            -LC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List #
+#                            -t8 -x -r -D__MSP430FR2433__ -v1 --data_model    #
+#                            small --code_model large                         #
+#                            -IC:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\430\INC\ #
+#                                                                             #
+###############################################################################
+
+      1    000000              ; infoB user area tables
+      2    000000              
+      3    000000                      EXTERN lastword,ROMDICT,fenceadr,NOOP
+      4    000000                      EXTERN DOTVER 
+      5    000000                      PUBLIC initDECON,UP1,appA0,appA1,cory,ft
+ est
+      6    000000              
+      7    000000                      RSEG    INFOB
+      8    000000 0000         UP1:     DW 0
+      9    000002                      ; user area 
+     10    000002 000000001000*        DW 0,0,16,0     ; reserved,>IN,BASE,STAT
+                                                       E
+     11    00000A ....                 DW ROMDICT      ; DP
+     12    00000C 00000000             DW 0,0          ; SOURCE init'd
+                                                        elsewhere
+     13    000010 ....                 DW lastword     ; LATEST
+     14    000012 00000000             DW 0,0          ; HP,LP init'd
+                                                        elsewhere; HP=Hold
+                                                        LP=leave stack
+                                                        pointer
+     15    000016 ....         appA1:  DW DOTVER         ; is default app
+                                                          ;mk
+     16    000018 0000                 DW 0            ; NEWEST not init'd
+     17    00001A ....                 DW fenceadr     ; FENCE for FORGET
+     18    00001C 000000000000         DW 0,0,0        ; user variables
+                                                        TBD
+     19    000022              
+     20    000022 0000         cory:   DW 0   ; cause of reset; its a copy of
+                                               SYSRSTIV done by init.
+     21    000024 0000         ftest:  DW 0
+     22    000026              
+     23    000026              ; ----------------------------------------------
+                               -----------
+     24    000026              
+     25    000026              initDECON:  ; delivery condition of user
+                                area
+     26    000026 000000001000*        DW 0,0,16,0     ; reserved,>IN,BASE,STAT
+                                                       E
+     27    00002E ....                 DW ROMDICT      ; DP
+     28    000030 00000000             DW 0,0          ; SOURCE init'd
+                                                        elsewhere
+     29    000034 ....                 DW lastword     ; LATEST
+     30    000036 00000000             DW 0,0          ; HP,LP init'd
+                                                        elsewhere; HP=Hold
+                                                        LP=leave stack
+                                                        pointer
+     31    00003A ....         appA0:  DW DOTVER         ; is default app
+                                                          ;mk
+     32    00003C 0000                 DW 0            ; NEWEST not init'd
+     33    00003E ....                 DW fenceadr     ; FENCE for FORGET
+     34    000040 000000000000         DW 0,0,0        ; user variables
+                                                        TBD
+     35    000046              
+     36    000046              
+     37    000000                      PUBLIC  CFver,CFverend
+     38    000046                      EVEN
+     39    000046 ..           CFver:  DB CFverend-1-CFver ;count
+     40    000047 434634333046*        DB 'CF430FR2433 V0.2exp'
+     41    00005A              CFverend:
+     42    00005A                      
+     43    00005A              
+     44    00005A              
+     45    00005A              END
+
+
+
+Segment             Type 	Mode
+----------------------------------------
+INFOB               UNTYPED  	REL 
+
+Label               Mode   Type                   Segment    Value/Offset
+------------------------------------------------------------------------------
+CFver               REL    CONST PUB UNTYP.       INFOB      46 
+CFverend            REL    CONST PUB UNTYP.       INFOB      5A 
+DOTVER              ABS    CONST EXT [003] UNTYP. __EXTERNS  Solved Extern 
+NOOP                ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+ROMDICT             ABS    CONST EXT [001] UNTYP. __EXTERNS  Solved Extern 
+UP1                 REL    CONST PUB UNTYP.       INFOB      0 
+appA0               REL    CONST PUB UNTYP.       INFOB      3A 
+appA1               REL    CONST PUB UNTYP.       INFOB      16 
+cory                REL    CONST PUB UNTYP.       INFOB      22 
+fenceadr            ABS    CONST EXT [002] UNTYP. __EXTERNS  Solved Extern 
+ftest               REL    CONST PUB UNTYP.       INFOB      24 
+initDECON           REL    CONST PUB UNTYP.       INFOB      26 
+lastword            ABS    CONST EXT [000] UNTYP. __EXTERNS  Solved Extern 
+
+
+##############################
+#          CRC:A9FD          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#         Bytes: 90          #
+##############################
+
+
+
+

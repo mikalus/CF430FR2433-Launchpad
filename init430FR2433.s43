@@ -1,0 +1,231 @@
+; CPU Configuration - MSP430FR2433  ; M.Kalus April 2016
+; Template was: init430f1611.s43 
+; for TI MSP430F1611 by B. Rodriguez  3 Jan 09
+
+; ----------------------------------------------------------------------
+; CamelForth for the Texas Instruments MSP430 
+; (c) 2009 Bradford J. Rodriguez.
+; 
+; This program is free software; you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation; either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;
+; Commercial inquiries should be directed to the author at 
+; 115 First St., #105, Collingwood, Ontario L9Y 4W3 Canada
+; or via email to bj@camelforth.com
+
+; ----------------------------------------------------------------------
+; CamelForth RAM memory map:
+;   UP          User Pointer, 2 bytes
+;   UAREA       User area, 32 bytes
+;   UAREA+20h   HOLD area, 40 bytes, grows down from end
+;   UAREA+48h   PAD buffer, 88 bytes, must follow HOLD area
+;   UAREA+A0h   Parameter stack, 128 B, grows down from end
+;   UAREA+120h  Return stack, 128 B, grows down from end
+;   UAREA+1A0h  TIB Terminal Input Buffer, 88 bytes
+
+; Note all must be word-aligned.
+; See also the definitions of U0, S0, and R0 in the "system variables &
+; constants" area.  A task w/o terminal input requires 200h bytes.
+; Double all except TIB and PAD for 32-bit CPUs.
+
+
+; RAM map
+; name     celles  comment
+                   ; -----
+UAREA_SIZE  = 16   ; UAREA 32 bytes
+                   ; -----
+                   ; | LSTACK: leave stack 
+                   ; | grows up 
+                   ; | 
+                   ; V
+                   ;   128 bytes
+                   ; ^
+                   ; |
+                   ; | grows down
+PSTACK_SIZE = 54   ; | PSTACK: top of parameter stack area. 
+                   ; -----
+                   ;   128 bytes
+                   ; ^
+                   ; |
+                   ; | grows down
+RSTACK_SIZE = 54   ; | RSTACK: top of return stack area. 
+
+;          aligned buffers only required for terminal tasks.
+; names    bytes  
+                   ; ^
+                   ; |
+                   ; | grows down
+HOLD_SIZE   = 34   ; | HOLDAREA: 
+                   ; -----
+PAD_SIZE    = 84   ; scratch pad
+                   ; -----
+TIB_SIZE    = 84   ; terminal input buffer
+                   ; -----
+
+        PUBLIC  UAREA,UP
+        PUBLIC  PADAREA,LSTACK,PSTACK,RSTACK,rtest
+        PUBLIC  TIBAREA,ROMDICT ;VECAREA
+        PUBLIC  TIB_SIZE,UAREA_SIZE ;VECS_SIZE ;HOLDAREA
+        EXTERN  COLDIP,lastword
+        
+RSEG    DATA16_N  ; uninitialized RAM segment
+
+UP:       DS16  1           ; User Pointer
+UAREA:    DS16  UAREA_SIZE  ; allocate user area. see: hilvl tabel for COLD
+          DS16  2  ; sicherheitzone
+
+rtest:    DS16  1
+LSTACK:                     ; start leave stack
+          DS16  PSTACK_SIZE ; allocate parameter stack
+PSTACK:                     ; top of parameter stack
+          DS16  RSTACK_SIZE ; allocate return stack 
+RSTACK:                     ; top of return stack 
+          DS8   HOLD_SIZE   ; allocate hold area 
+HOLDAREA:                   ; top of hold adrea 
+PADAREA:  DS8   PAD_SIZE    ; start scratch pad; must follow HOLDAREA
+TIBAREA:  DS8   TIB_SIZE    ; start Terminal Input Buffer
+
+; ROMDICT moved to end of forth definitions, past lastword. See: core
+
+
+
+; ----------------------------------------------------------------------
+; POWER ON RESET AND INITIALIZATION
+
+#include "msp430fr2433.h"             ; #define controlled include file
+#include "CF430FRforth.h"             ; header macros and register defs
+
+        PUBLIC  reset,main  
+
+RSEG    CODE          ; place program in 'CODE' segment
+
+;------------------------------------------------------------------------------
+; Initialisation by Matthias Trute, April 2016 , adopted for IAR by M.Kalus 
+
+reset:            ; Chip specific initialisations go here.
+main:             ; IAR Debugger requires the 'main' symbol.  mk
+start_init:       ; I require the start_init symbol. ;-)      mk
+
+;------------------------------------------------------------------------------
+
+mov #5A80h, &WDTCTL ; Watchdog off
+
+ ; Now it is time to initialize hardware. (Porting: Change this !)
+
+ ; Backchannel UART communication over
+ ; P1.4: USCI0 TXD
+ ; P1.5: USCI0 RXD
+ 
+
+
+ ; Init Clock
+
+ bis.w #40h, r2
+ mov.w #10h, &186h
+ mov.w #150h, &180h
+ mov.w #6h, &182h
+ mov.w #0F4h, &184h
+
+ nop
+ nop
+ nop
+ bic.w #40h, r2
+
+FLLQ: bit.w #300h, &18Eh
+ jc FLLQ
+
+
+
+ ; Init IO
+ bic   #LOCKLPM5, &PM5CTL0         ; Unlock I/O pins
+
+
+
+ /*;------------------------------------------------------------------------------
+ ; Init serial communication
+ mov #UCSWRST, &UCA0CTLW0          ; **Put state machine in reset**
+ bis #UCSSEL__SMCLK, &UCA0CTLW0    ; SMCLK
+ mov #4, &UCA0BRW                  ; 8 MHz 115200 Baud
+ mov #05551h, &UCA0MCTLW           ; Modulation UCBRSx=55h, UCBRFx=5, UCOS16
+ mov.b #32+16, &P1SEL0             ; Configure UART pins
+ bic #UCSWRST, &UCA0CTLW0          ; **Initialize USCI state machine**
+ */;------------------------------------------------------------------------------
+
+
+
+ ; Init serial communication
+ mov #UCSWRST, &UCA0CTLW0          ; **Put state machine in reset**
+ bis #UCSSEL__SMCLK, &UCA0CTLW0    ; SMCLK
+ mov #52, &UCA0BRW                  ; 8 MHz 9600 Baud
+ mov #04911h, &UCA0MCTLW           ; Modulation UCBRSx=49h, UCBRFx=1, UCOS16
+ mov.b #32+16, &P1SEL0             ; Configure UART pins
+ bic #UCSWRST, &UCA0CTLW0          ; **Initialize USCI state machine**
+
+
+
+ ; Set LED at P3.1 
+ bis.b #BIT1,&P3DIR
+ bis.b #BIT1,&P3OUT
+
+
+
+ ; Enable write access of FRAM 
+ mov #0A502h, &SYSCFG0 
+ ; this is debug only. WORD uses HERE in fram as scratch area. 
+ ; to protect forth kernel some more work has to be done. mk 2016-04-10
+
+
+
+ ; Forth register initialisation
+    MOV     #RSTACK,SP              ; set up return stack
+    MOV     #PSTACK,PSP             ; set up parameter stack
+    MOV     #UAREA,&UP              ; initial user pointer
+ ;    MOV     #DEBUGIP,IP              ; set IP of starting word 
+    MOV     #COLDIP,IP              ; set IP of starting word 
+    MOV     #0,TOS                  ; clear top of pstack
+    NEXT
+    
+init_end:
+
+; ----------------------------------------------------------------------
+; DEFAULT INTERRUPT HANDLER
+         PUBLIC nullirq
+isr_start:
+nullirq: RETI
+isr_end:
+
+
+
+/*
+; ----- DEBUG FORTH EXECUTION ------------------------------------------
+; debug serial
+  EXTERN KEY,EMIT,bran,DOTVER,CR,lit,COLD,MS
+  PUBLIC DEBUGIP
+DEBUGIP: 
+   DW lit,25,MS
+   DW DOTVER
+   DW CR   
+DEBUG1:    
+   DW KEY  
+   DW EMIT 
+;   DW CR   
+   DW bran 
+   DEST  DEBUG1
+*/
+
+
+
+; ----------------------------------------------------------------------
+
+ROMDICT:
+        END

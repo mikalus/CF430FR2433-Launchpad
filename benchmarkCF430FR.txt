@@ -1,0 +1,114 @@
+\ CF430FR V0.2 Source Code
+\ CamelForth for the MSP-EXP430FR5739 Experimenter Board
+\ Maschine: MSP430FR5739, 8Mhz DCO intern, 9600 8N2. 
+
+
+\ Benchme Helper# 
+
+: BEEP ( -- ) \ emits an audible beep signal
+  7 EMIT ;  
+
+: BENCHME ( xt n -- ) 
+  DUP >R 
+  BEEP
+  0 DO DUP EXECUTE LOOP DROP
+  BEEP 
+  CR R> . ." Iterations." CR ; 
+
+
+
+\ Integer Calculations #
+
+DECIMAL 
+32000 CONSTANT INTMAX
+VARIABLE INTRESULT
+
+: DOINT   
+  1 DUP INTRESULT DUP >R !  ( -- 1 ) ( R: -- adr ) \ INTRESULT=1 
+  BEGIN
+    DUP INTMAX <  ( -- 1 f ) 
+  WHILE
+    DUP NEGATE R@ +!  1+  
+    DUP R@ +!         1+ 
+    R@ @ OVER * R@ !  1+ 
+    R@ @ OVER / R@ !  1+ 
+  REPEAT
+  R> DROP DROP ; 
+
+' DOINT 100 BENCHME
+
+\ 100x DOINT, RESULTS STOPWATCH 
+\ 02'45''10 
+\ 02'45''09 
+
+
+
+\ Fibonacci 1#
+\ fn = fn-1 + fn-2 
+
+: FIB1 ( n1 -- n2 ) 
+    DUP 2 < IF DROP 1 EXIT THEN  
+    DUP  1-  RECURSE    
+    SWAP 2 - RECURSE  + 
+    ;
+
+: FIB1-BENCH 20 0 DO I FIB1 DROP LOOP ;
+
+' FIB1-BENCH 100 BENCHME
+
+\ 100x FIB1-BENCH RESULTS STOPWATCH 
+\ 00'46''39
+\ 00'46''38
+
+
+
+\ Fibonacci 2#
+
+: FIB2 ( n1 -- n2 ) 
+   0 1 ROT 0 OVER OVER > IF DO 
+      OVER + SWAP LOOP ELSE DROP DROP THEN 
+   DROP ;
+ 
+: FIB2-BENCH 20 0 DO I FIB2 DROP LOOP ; 
+: W2 ( N -- ) 0 DO FIB2-BENCH LOOP BEEP ; 
+
+
+\ 10000 W2 RESULTS STOPWATCH 
+\ 00'16''91
+\ 00'16''91
+
+
+
+\ Forth Nesting Benchmark#
+
+ \ Forth nesting (NEXT) Benchmark                     cas20101204                   
+ : bottom ;                                                                         
+ : 1st bottom bottom ;  : 2nd 1st 1st ;      : 3rd 2nd 2nd ;                        
+ : 4th 3rd 3rd ;        : 5th 4th 4th ;      : 6th 5th 5th ;                        
+ : 7th 6th 6th ;        : 8th 7th 7th ;      : 9th 8th 8th ;                        
+ : 10th 9th 9th ;       : 11th 10th 10th ;   : 12th 11th 11th ;                     
+ : 13th 12th 12th ;     : 14th 13th 13th ;   : 15th 14th 14th ;                     
+ : 16th 15th 15th ;     : 17th 16th 16th ;   : 18th 17th 17th ;                     
+ : 19th 18th 18th ;     : 20th 19th 19th ;   : 21th 20th 20th ;                     
+ : 22th 21th 21th ;     : 23th 22th 22th ;   : 24th 23th 23th ;                     
+ : 25th 24th 24th ;                                                                 
+                                                                                    
+ : 32million   CR ." 32 million nest/unnest operations" 25th ;                      
+ :  1million   CR ."  1 million nest/unnest operations" 20th ;     
+
+\ 32million RESULTS STOPWATCH 
+\ 02'31''23 
+\ 02'31''14
+
+
+\ Zum Vergleich: 
+\ 25th in gforth, PowerBookG4 867MHz, mac OSX
+\ 00'10''67
+
+
+\ measured times mk 2012-01-13
+
+
+
+
+

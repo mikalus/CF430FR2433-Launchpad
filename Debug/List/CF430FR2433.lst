@@ -1,0 +1,969 @@
+###############################################################################
+#                                                                             #
+#     IAR Assembler V6.40.1.950/W32  for MSP430 04/Jun/2018  10:01:11         #
+#     Copyright 1996-2015 IAR Systems AB.                                     #
+#                                                                             #
+#           Target option =  MSP430X                                          #
+#           Source file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\CF430FR2433.s43#
+#           List file     =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List\CF430FR2433.lst#
+#           Object file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj\CF430FR2433.r43#
+#           Command line  =  C:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\CF430FR2433.s43 #
+#                            -OC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\Obj #
+#                            -s+ -M<> -w+                                     #
+#                            -LC:\Users\mka\Documents\GitHub\CF430FR2433-Launchpad\Debug\List #
+#                            -t8 -x -r -D__MSP430FR2433__ -v1 --data_model    #
+#                            small --code_model large                         #
+#                            -IC:\Program Files (x86)\IAR Systems\Embedded Workbench 7.3\430\INC\ #
+#                                                                             #
+###############################################################################
+
+      1    000000              ; CF430FR2433.s43 - start compiling
+      2    000000              ; ----------------------------------------------
+                               ------------------------
+      3    000000              ; CamelForth for the Texas Instruments MSP430
+                                FRAM Family. 
+      4    000000              ; (c) 2009 Bradford J. Rodriguez.
+      5    000000              ; 
+      6    000000              ; This program is free software; you can
+                                redistribute it and/or modify
+      7    000000              ; it under the terms of the GNU General Public
+                                License as published by
+      8    000000              ; the Free Software Foundation; either version 3
+                                of the License, or
+      9    000000              ; (at your option) any later version.
+     10    000000              ;
+     11    000000              ; This program is distributed in the hope that
+                                it will be useful,
+     12    000000              ; but WITHOUT ANY WARRANTY; without even the
+                                implied warranty of
+     13    000000              ; MERCHANTABILITY or FITNESS FOR A PARTICULAR
+                                PURPOSE.  See the
+     14    000000              ; GNU General Public License for more details.
+     15    000000              ;
+     16    000000              ; You should have received a copy of the GNU
+                                General Public License
+     17    000000              ; along with this program.  If not, see
+                                <http://www.gnu.org/licenses/>.
+     18    000000              ;
+     19    000000              ; Commercial inquiries should be directed to the
+                                author at 
+     20    000000              ; 115 First St., #105, Collingwood, Ontario L9Y
+                                4W3 Canada
+     21    000000              ; or via email to bj@camelforth.com
+     22    000000              
+     23    000000              ; ----------------------------------------------
+                               ------------------------
+     24    000000              ; REVISION HISTORY
+     25    000000              ; 31 may 2018 mk - builds ok, runs on launchpad.
+     26    000000              
+     27    000000              ; ----------------------------------------------
+                               ------------------------
+     28    000000              #include "msp430.h"                     ;
+                                #define controlled include file
+     29    000000              #include "CF430FRforth.h"               ; header
+                                macros & register defs
+     30    000000              
+     31    000000              
+     32    000000              ; ----------------------------------------------
+                               ------------------------
+     33    000000              ; We #include the following source files, rather
+                                than compiling them 
+     34    000000              ; separately, so that they can inherit the value
+                                of 'link'.
+     35    000000              
+     36    000000              #include "core430FR.s43"
+     37    000652              #include "deps430FR.s43"
+     38    0007A8              #include "hilvl430FR.s43"
+     39    0017EC              ; #include "expapp.s43"   ; include your
+                                application here 
+     40    0017EC              
+     41    0017EC              ; put task at the very end. Dont FORGET beneath
+                                FENCE
+     42    0017EC              fenceadr:
+     43    000000              PUBLIC fenceadr
+     44    0017EC              ; TASK    --  
+     45    0017EC                   HEADER  TASK,4,'TASK',DOCOLON
+     45.1  000000                      PUBLIC  TASK
+     45.2  0017EC ....                 DW      link
+     45.3  0017EE FF                   DB      0FFh       ; not immediate
+     45.4  0017EF              link    SET     $
+     45.5  0017EF 04                   DB      4
+     45.6  0017F0 5441534B             DB      'TASK'
+     45.7  0017F4                      EVEN
+     45.8  0017F4                      IF      'DOCOLON'='DOCODE'
+     45.9  0017F4              TASK: DW     $+2
+     45.10 0017F4                      ELSE
+     45.11 0017F4 ....         TASK: DW      DOCOLON
+     45.12 0017F6                      ENDIF
+     45.13 0017F6                      ENDM
+     46    0017F6 ....                 DW EXIT
+     47    0017F8              
+     48    000000              PUBLIC lastword
+     49    0017F8              lastword equ link
+     50    0017F8              
+     51    0017F8              ; for debug map only:
+     52    0017F8              CF430FRend:
+     53    0017F8              #define CFlength = CF430FRend-CF430FRstart
+     54    0017F8              
+     55    0017F8              END
+
+
+
+Segment             Type 	Mode
+----------------------------------------
+CODE                UNTYPED  	REL 
+
+Label               Mode   Type                   Segment    Value/Offset
+------------------------------------------------------------------------------
+ABBS                REL    CONST PUB UNTYP.       CODE       8E4 
+ABORT               REL    CONST PUB UNTYP.       CODE       10F8 
+ABORTQUOTE          REL    CONST PUB UNTYP.       CODE       1124 
+ACC1                REL    CONST UNTYP.           CODE       B5C 
+ACC3                REL    CONST UNTYP.           CODE       B92 
+ACC4                REL    CONST UNTYP.           CODE       B9C 
+ACC5                REL    CONST UNTYP.           CODE       BA0 
+ACCEPT              REL    CONST PUB UNTYP.       CODE       B52 
+ADCCTL0             ABS    CONST UNTYP.           ASEG       700 
+ADCCTL0_H           ABS    CONST UNTYP.           ASEG       701 
+ADCCTL0_L           ABS    CONST UNTYP.           ASEG       700 
+ADCCTL1             ABS    CONST UNTYP.           ASEG       702 
+ADCCTL1_H           ABS    CONST UNTYP.           ASEG       703 
+ADCCTL1_L           ABS    CONST UNTYP.           ASEG       702 
+ADCCTL2             ABS    CONST UNTYP.           ASEG       704 
+ADCCTL2_H           ABS    CONST UNTYP.           ASEG       705 
+ADCCTL2_L           ABS    CONST UNTYP.           ASEG       704 
+ADCHI               ABS    CONST UNTYP.           ASEG       708 
+ADCHI_H             ABS    CONST UNTYP.           ASEG       709 
+ADCHI_L             ABS    CONST UNTYP.           ASEG       708 
+ADCIE               ABS    CONST UNTYP.           ASEG       71A 
+ADCIE_H             ABS    CONST UNTYP.           ASEG       71B 
+ADCIE_L             ABS    CONST UNTYP.           ASEG       71A 
+ADCIFG              ABS    CONST UNTYP.           ASEG       71C 
+ADCIFG_H            ABS    CONST UNTYP.           ASEG       71D 
+ADCIFG_L            ABS    CONST UNTYP.           ASEG       71C 
+ADCIV               ABS    CONST UNTYP.           ASEG       71E 
+ADCIV_H             ABS    CONST UNTYP.           ASEG       71F 
+ADCIV_L             ABS    CONST UNTYP.           ASEG       71E 
+ADCLO               ABS    CONST UNTYP.           ASEG       706 
+ADCLO_H             ABS    CONST UNTYP.           ASEG       707 
+ADCLO_L             ABS    CONST UNTYP.           ASEG       706 
+ADCMCTL0            ABS    CONST UNTYP.           ASEG       70A 
+ADCMCTL0_H          ABS    CONST UNTYP.           ASEG       70B 
+ADCMCTL0_L          ABS    CONST UNTYP.           ASEG       70A 
+ADCMEM0             ABS    CONST UNTYP.           ASEG       712 
+ADCMEM0_H           ABS    CONST UNTYP.           ASEG       713 
+ADCMEM0_L           ABS    CONST UNTYP.           ASEG       712 
+AGAIN               REL    CONST PUB UNTYP.       CODE       1386 
+ALIGNED             REL    CONST PUB UNTYP.       CODE       676 
+ALIGNN              REL    CONST PUB UNTYP.       CODE       65C 
+ALLOT               REL    CONST PUB UNTYP.       CODE       D82 
+ANDD                REL    CONST PUB UNTYP.       CODE       282 
+APP                 REL    CONST PUB UNTYP.       CODE       81C 
+BACKSLASH           REL    CONST PUB UNTYP.       CODE       1662 
+BAKMEM0             ABS    CONST UNTYP.           ASEG       660 
+BAKMEM0_H           ABS    CONST UNTYP.           ASEG       661 
+BAKMEM0_L           ABS    CONST UNTYP.           ASEG       660 
+BAKMEM1             ABS    CONST UNTYP.           ASEG       662 
+BAKMEM10            ABS    CONST UNTYP.           ASEG       674 
+BAKMEM10_H          ABS    CONST UNTYP.           ASEG       675 
+BAKMEM10_L          ABS    CONST UNTYP.           ASEG       674 
+BAKMEM11            ABS    CONST UNTYP.           ASEG       676 
+BAKMEM11_H          ABS    CONST UNTYP.           ASEG       677 
+BAKMEM11_L          ABS    CONST UNTYP.           ASEG       676 
+BAKMEM12            ABS    CONST UNTYP.           ASEG       678 
+BAKMEM12_H          ABS    CONST UNTYP.           ASEG       679 
+BAKMEM12_L          ABS    CONST UNTYP.           ASEG       678 
+BAKMEM13            ABS    CONST UNTYP.           ASEG       67A 
+BAKMEM13_H          ABS    CONST UNTYP.           ASEG       67B 
+BAKMEM13_L          ABS    CONST UNTYP.           ASEG       67A 
+BAKMEM14            ABS    CONST UNTYP.           ASEG       67C 
+BAKMEM14_H          ABS    CONST UNTYP.           ASEG       67D 
+BAKMEM14_L          ABS    CONST UNTYP.           ASEG       67C 
+BAKMEM15            ABS    CONST UNTYP.           ASEG       67E 
+BAKMEM15_H          ABS    CONST UNTYP.           ASEG       67F 
+BAKMEM15_L          ABS    CONST UNTYP.           ASEG       67E 
+BAKMEM1_H           ABS    CONST UNTYP.           ASEG       663 
+BAKMEM1_L           ABS    CONST UNTYP.           ASEG       662 
+BAKMEM2             ABS    CONST UNTYP.           ASEG       664 
+BAKMEM2_H           ABS    CONST UNTYP.           ASEG       665 
+BAKMEM2_L           ABS    CONST UNTYP.           ASEG       664 
+BAKMEM3             ABS    CONST UNTYP.           ASEG       666 
+BAKMEM3_H           ABS    CONST UNTYP.           ASEG       667 
+BAKMEM3_L           ABS    CONST UNTYP.           ASEG       666 
+BAKMEM4             ABS    CONST UNTYP.           ASEG       668 
+BAKMEM4_H           ABS    CONST UNTYP.           ASEG       669 
+BAKMEM4_L           ABS    CONST UNTYP.           ASEG       668 
+BAKMEM5             ABS    CONST UNTYP.           ASEG       66A 
+BAKMEM5_H           ABS    CONST UNTYP.           ASEG       66B 
+BAKMEM5_L           ABS    CONST UNTYP.           ASEG       66A 
+BAKMEM6             ABS    CONST UNTYP.           ASEG       66C 
+BAKMEM6_H           ABS    CONST UNTYP.           ASEG       66D 
+BAKMEM6_L           ABS    CONST UNTYP.           ASEG       66C 
+BAKMEM7             ABS    CONST UNTYP.           ASEG       66E 
+BAKMEM7_H           ABS    CONST UNTYP.           ASEG       66F 
+BAKMEM7_L           ABS    CONST UNTYP.           ASEG       66E 
+BAKMEM8             ABS    CONST UNTYP.           ASEG       670 
+BAKMEM8_H           ABS    CONST UNTYP.           ASEG       671 
+BAKMEM8_L           ABS    CONST UNTYP.           ASEG       670 
+BAKMEM9             ABS    CONST UNTYP.           ASEG       672 
+BAKMEM9_H           ABS    CONST UNTYP.           ASEG       673 
+BAKMEM9_L           ABS    CONST UNTYP.           ASEG       672 
+BASE                REL    CONST PUB UNTYP.       CODE       7C6 
+BEGIN               REL    CONST PUB UNTYP.       CODE       1360 
+BELL                REL    CONST PUB UNTYP.       CODE       1520 
+BLANK               REL    CONST PUB UNTYP.       CODE       888 
+BRACCHAR            REL    CONST PUB UNTYP.       CODE       1166 
+BRACIS              REL    CONST PUB UNTYP.       CODE       1784 
+BRACTICK            REL    CONST PUB UNTYP.       CODE       12CE 
+BUILDS              REL    CONST PUB UNTYP.       CODE       11C0 
+CCOMMA              REL    CONST PUB UNTYP.       CODE       DA6 
+CELL                REL    CONST PUB UNTYP.       CODE       68C 
+CELLPLUS            REL    CONST PUB UNTYP.       CODE       69A 
+CELLS               REL    CONST PUB UNTYP.       CODE       6AC 
+CEXIT               REL    CONST PUB UNTYP.       CODE       752 
+CF430FRend          REL    CONST UNTYP.           CODE       17F8 
+CF430FRstart        REL    CONST UNTYP.           CODE       0 
+CFETCH              REL    CONST PUB UNTYP.       CODE       216 
+CFid                ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+CFver               ABS    CONST EXT [012] UNTYP. __EXTERNS  Solved Extern 
+CHARPLUS            REL    CONST PUB UNTYP.       CODE       6B8 
+CHARR               REL    CONST PUB UNTYP.       CODE       1150 
+CHARS               REL    CONST PUB UNTYP.       CODE       6C4 
+CMOVE               REL    CONST PUB UNTYP.       CODE       542 
+CMOVEUP             REL    CONST PUB UNTYP.       CODE       566 
+CMOVE_1             REL    CONST UNTYP.           CODE       54C 
+CMOVE_X             REL    CONST UNTYP.           CODE       556 
+CMOVU_1             REL    CONST UNTYP.           CODE       574 
+CMOVU_X             REL    CONST UNTYP.           CODE       580 
+COLD                REL    CONST PUB UNTYP.       CODE       17BE 
+COLDIP              REL    CONST PUB UNTYP.       CODE       17C0 
+COLON               REL    CONST PUB UNTYP.       CODE       12AA 
+COMMA               REL    CONST PUB UNTYP.       CODE       D90 
+COMMABRANCH         REL    CONST PUB UNTYP.       CODE       768 
+COMMACALL           REL    CONST PUB UNTYP.       CODE       70E 
+COMMACF             REL    CONST PUB UNTYP.       CODE       6F6 
+COMMADEST           REL    CONST PUB UNTYP.       CODE       776 
+COMMAJMP            REL    CONST PUB UNTYP.       CODE       722 
+COMMANONE           REL    CONST PUB UNTYP.       CODE       7A0 
+COMMAXT             REL    CONST PUB UNTYP.       CODE       6DE 
+CONSTANT            REL    CONST PUB UNTYP.       CODE       70 
+CORY                REL    CONST PUB UNTYP.       CODE       8B0 
+COUNT               REL    CONST PUB UNTYP.       CODE       AC6 
+CR                  REL    CONST PUB UNTYP.       CODE       AD8 
+CRCDI               ABS    CONST UNTYP.           ASEG       1C0 
+CRCDIRB             ABS    CONST UNTYP.           ASEG       1C2 
+CRCDIRB_H           ABS    CONST UNTYP.           ASEG       1C3 
+CRCDIRB_L           ABS    CONST UNTYP.           ASEG       1C2 
+CRCDI_H             ABS    CONST UNTYP.           ASEG       1C1 
+CRCDI_L             ABS    CONST UNTYP.           ASEG       1C0 
+CRCINIRES           ABS    CONST UNTYP.           ASEG       1C4 
+CRCINIRES_H         ABS    CONST UNTYP.           ASEG       1C5 
+CRCINIRES_L         ABS    CONST UNTYP.           ASEG       1C4 
+CRCRESR             ABS    CONST UNTYP.           ASEG       1C6 
+CRCRESR_H           ABS    CONST UNTYP.           ASEG       1C7 
+CRCRESR_L           ABS    CONST UNTYP.           ASEG       1C6 
+CREATE              REL    CONST PUB UNTYP.       CODE       11D6 
+CSCTL0              ABS    CONST UNTYP.           ASEG       180 
+CSCTL0_H            ABS    CONST UNTYP.           ASEG       181 
+CSCTL0_L            ABS    CONST UNTYP.           ASEG       180 
+CSCTL1              ABS    CONST UNTYP.           ASEG       182 
+CSCTL1_H            ABS    CONST UNTYP.           ASEG       183 
+CSCTL1_L            ABS    CONST UNTYP.           ASEG       182 
+CSCTL2              ABS    CONST UNTYP.           ASEG       184 
+CSCTL2_H            ABS    CONST UNTYP.           ASEG       185 
+CSCTL2_L            ABS    CONST UNTYP.           ASEG       184 
+CSCTL3              ABS    CONST UNTYP.           ASEG       186 
+CSCTL3_H            ABS    CONST UNTYP.           ASEG       187 
+CSCTL3_L            ABS    CONST UNTYP.           ASEG       186 
+CSCTL4              ABS    CONST UNTYP.           ASEG       188 
+CSCTL4_H            ABS    CONST UNTYP.           ASEG       189 
+CSCTL4_L            ABS    CONST UNTYP.           ASEG       188 
+CSCTL5              ABS    CONST UNTYP.           ASEG       18A 
+CSCTL5_H            ABS    CONST UNTYP.           ASEG       18B 
+CSCTL5_L            ABS    CONST UNTYP.           ASEG       18A 
+CSCTL6              ABS    CONST UNTYP.           ASEG       18C 
+CSCTL6_H            ABS    CONST UNTYP.           ASEG       18D 
+CSCTL6_L            ABS    CONST UNTYP.           ASEG       18C 
+CSCTL7              ABS    CONST UNTYP.           ASEG       18E 
+CSCTL7_H            ABS    CONST UNTYP.           ASEG       18F 
+CSCTL7_L            ABS    CONST UNTYP.           ASEG       18E 
+CSCTL8              ABS    CONST UNTYP.           ASEG       190 
+CSCTL8_H            ABS    CONST UNTYP.           ASEG       191 
+CSCTL8_L            ABS    CONST UNTYP.           ASEG       190 
+CSTORE              REL    CONST PUB UNTYP.       CODE       224 
+DABS                REL    CONST PUB UNTYP.       CODE       92A 
+DDP                 REL    CONST PUB UNTYP.       CODE       7DE 
+DECIMAL             REL    CONST PUB UNTYP.       CODE       D48 
+DEFER               REL    CONST PUB UNTYP.       CODE       1756 
+DEPTH               REL    CONST PUB UNTYP.       CODE       14B2 
+DIGITQ              REL    CONST PUB UNTYP.       CODE       F1C 
+DIV1                REL    CONST UNTYP.           CODE       4F0 
+DIV2                REL    CONST UNTYP.           CODE       4F6 
+DIV3                REL    CONST UNTYP.           CODE       50A 
+DIV4                REL    CONST UNTYP.           CODE       50C 
+DIVIDE              REL    CONST UNTYP.           CODE       4EA 
+DNEG1               REL    CONST UNTYP.           CODE       920 
+DNEGATE             REL    CONST PUB UNTYP.       CODE       8F8 
+DO                  REL    CONST PUB UNTYP.       CODE       13EA 
+DOALIAS             REL    CONST PUB UNTYP.       CODE       B0 
+DOCODE              REL    CONST UNTYP.           CODE       Not solved 
+DOCOLON             REL    CONST PUB UNTYP.       CODE       3A 
+DOCON               REL    CONST PUB UNTYP.       CODE       78 
+DOES                REL    CONST PUB UNTYP.       CODE       1206 
+DOROM               REL    CONST PUB UNTYP.       CODE       84 
+DOT                 REL    CONST PUB UNTYP.       CODE       D22 
+DOTQUOTE            REL    CONST PUB UNTYP.       CODE       C10 
+DOTS                REL    CONST PUB UNTYP.       CODE       161C 
+DOTS1               REL    CONST UNTYP.           CODE       164C 
+DOTS2               REL    CONST UNTYP.           CODE       165A 
+DOTVER              REL    CONST PUB UNTYP.       CODE       17A8 
+DOUSER              REL    CONST PUB UNTYP.       CODE       A0 
+DOVAR               REL    CONST PUB UNTYP.       CODE       58 
+DROP                REL    CONST PUB UNTYP.       CODE       F6 
+DUMP                REL    CONST PUB UNTYP.       CODE       15B0 
+DUP                 REL    CONST PUB UNTYP.       CODE       D0 
+ELSS                REL    CONST PUB UNTYP.       CODE       1344 
+EMIT                REL    CONST PUB UNTYP.       CODE       60A 
+EMITLOOP            REL    CONST UNTYP.           CODE       60C 
+ENDLOOP             REL    CONST PUB UNTYP.       CODE       1408 
+ENVIRONMENTQ        REL    CONST PUB UNTYP.       CODE       14D0 
+EQUAL               REL    CONST PUB UNTYP.       CODE       37E 
+EVALUATE            REL    CONST PUB UNTYP.       CODE       1080 
+EXECUTE             REL    CONST PUB UNTYP.       CODE       C 
+EXIT                REL    CONST PUB UNTYP.       CODE       32 
+FALSE               REL    CONST PUB UNTYP.       CODE       1540 
+FENCE               REL    CONST PUB UNTYP.       CODE       838 
+FETCH               REL    CONST PUB UNTYP.       CODE       1F6 
+FILL                REL    CONST PUB UNTYP.       CODE       51E 
+FILL_1              REL    CONST UNTYP.           CODE       528 
+FILL_X              REL    CONST UNTYP.           CODE       532 
+FIND                REL    CONST PUB UNTYP.       CODE       ED4 
+FIND1               REL    CONST UNTYP.           CODE       EAC 
+FIND2               REL    CONST UNTYP.           CODE       EC4 
+FIND3               REL    CONST UNTYP.           CODE       EF0 
+FINDNAME            REL    CONST PUB UNTYP.       CODE       EA6 
+FMMOD1              REL    CONST UNTYP.           CODE       9A8 
+FMSLASHMOD          REL    CONST PUB UNTYP.       CODE       988 
+FORGET              REL    CONST PUB UNTYP.       CODE       169A 
+FRCTL0              ABS    CONST UNTYP.           ASEG       1A0 
+FRCTL0_H            ABS    CONST UNTYP.           ASEG       1A1 
+FRCTL0_L            ABS    CONST UNTYP.           ASEG       1A0 
+GCCTL0              ABS    CONST UNTYP.           ASEG       1A4 
+GCCTL0_H            ABS    CONST UNTYP.           ASEG       1A5 
+GCCTL0_L            ABS    CONST UNTYP.           ASEG       1A4 
+GCCTL1              ABS    CONST UNTYP.           ASEG       1A6 
+GCCTL1_H            ABS    CONST UNTYP.           ASEG       1A7 
+GCCTL1_L            ABS    CONST UNTYP.           ASEG       1A6 
+GREATER             REL    CONST PUB UNTYP.       CODE       3B4 
+HEADR               REL    CONST PUB UNTYP.       CODE       1190 
+HERE                REL    CONST PUB UNTYP.       CODE       D70 
+HEX                 REL    CONST PUB UNTYP.       CODE       D5C 
+HIDE                REL    CONST PUB UNTYP.       CODE       125A 
+HOLD                REL    CONST PUB UNTYP.       CODE       C64 
+HP                  REL    CONST PUB UNTYP.       CODE       806 
+IFF                 REL    CONST PUB UNTYP.       CODE       131C 
+II                  REL    CONST PUB UNTYP.       CODE       470 
+IMMEDIATE           REL    CONST PUB UNTYP.       CODE       1294 
+IMMEDQ              REL    CONST PUB UNTYP.       CODE       E88 
+INTER1              REL    CONST UNTYP.           CODE       1024 
+INTER2              REL    CONST UNTYP.           CODE       104C 
+INTER3              REL    CONST UNTYP.           CODE       104E 
+INTER4              REL    CONST UNTYP.           CODE       1052 
+INTER5              REL    CONST UNTYP.           CODE       105E 
+INTER6              REL    CONST UNTYP.           CODE       106C 
+INTER8              REL    CONST UNTYP.           CODE       106C 
+INTER9              REL    CONST UNTYP.           CODE       1070 
+INTERPRET           REL    CONST PUB UNTYP.       CODE       1016 
+INVERT              REL    CONST PUB UNTYP.       CODE       2B2 
+IS                  REL    CONST PUB UNTYP.       CODE       1772 
+JJ                  REL    CONST PUB UNTYP.       CODE       486 
+KEY                 REL    CONST PUB UNTYP.       CODE       624 
+KEYLOOP             REL    CONST UNTYP.           CODE       626 
+KEYQ                REL    CONST PUB UNTYP.       CODE       642 
+L$002               REL    CONST UNTYP.           CODE       4C0 
+L$01                REL    CONST UNTYP.           CODE       4C8 
+L0                  REL    CONST PUB UNTYP.       CODE       84E 
+LATEST              REL    CONST PUB UNTYP.       CODE       7FC 
+LDUMP1              REL    CONST UNTYP.           CODE       15BA 
+LDUMP2              REL    CONST UNTYP.           CODE       15D4 
+LDUMP3              REL    CONST UNTYP.           CODE       15F2 
+LEAV                REL    CONST PUB UNTYP.       CODE       144E 
+LEFTBRACKET         REL    CONST PUB UNTYP.       CODE       1234 
+LESS                REL    CONST PUB UNTYP.       CODE       3A0 
+LESSNUM             REL    CONST PUB UNTYP.       CODE       C7C 
+LFROM               REL    CONST PUB UNTYP.       CODE       13D2 
+LITER1              REL    CONST UNTYP.           CODE       F10 
+LITERAL             REL    CONST PUB UNTYP.       CODE       EFE 
+LOO                 REL    CONST PUB UNTYP.       CODE       1426 
+LOOP1               REL    CONST UNTYP.           CODE       140E 
+LOOP2               REL    CONST UNTYP.           CODE       141C 
+LP                  REL    CONST PUB UNTYP.       CODE       810 
+LPAREN              REL    CONST PUB UNTYP.       CODE       117A 
+LSHIFT              REL    CONST PUB UNTYP.       CODE       31E 
+LSH_1               REL    CONST UNTYP.           CODE       328 
+LSH_X               REL    CONST UNTYP.           CODE       32E 
+LSTACK              ABS    CONST EXT [003] UNTYP. __EXTERNS  Solved Extern 
+MAC                 ABS    CONST UNTYP.           ASEG       4C4 
+MAC32H              ABS    CONST UNTYP.           ASEG       4DA 
+MAC32H_H            ABS    CONST UNTYP.           ASEG       4DB 
+MAC32H_L            ABS    CONST UNTYP.           ASEG       4DA 
+MAC32L              ABS    CONST UNTYP.           ASEG       4D8 
+MAC32L_H            ABS    CONST UNTYP.           ASEG       4D9 
+MAC32L_L            ABS    CONST UNTYP.           ASEG       4D8 
+MACS                ABS    CONST UNTYP.           ASEG       4C6 
+MACS32H             ABS    CONST UNTYP.           ASEG       4DE 
+MACS32H_H           ABS    CONST UNTYP.           ASEG       4DF 
+MACS32H_L           ABS    CONST UNTYP.           ASEG       4DE 
+MACS32L             ABS    CONST UNTYP.           ASEG       4DC 
+MACS32L_H           ABS    CONST UNTYP.           ASEG       4DD 
+MACS32L_L           ABS    CONST UNTYP.           ASEG       4DC 
+MACS_H              ABS    CONST UNTYP.           ASEG       4C7 
+MACS_L              ABS    CONST UNTYP.           ASEG       4C6 
+MACU                REL    CONST UNTYP.           CODE       4BC 
+MAC_H               ABS    CONST UNTYP.           ASEG       4C5 
+MAC_L               ABS    CONST UNTYP.           ASEG       4C4 
+MARKER              REL    CONST PUB UNTYP.       CODE       1724 
+MAX                 REL    CONST PUB UNTYP.       CODE       A1A 
+MAX1                REL    CONST UNTYP.           CODE       A26 
+MEM                 REL    CONST PUB UNTYP.       CODE       1676 
+MEMTOP              REL    CONST PUB UNTYP.       CODE       8A4 
+MIN                 REL    CONST PUB UNTYP.       CODE       A32 
+MIN1                REL    CONST UNTYP.           CODE       A3E 
+MINUS               REL    CONST PUB UNTYP.       CODE       26E 
+MODD                REL    CONST PUB UNTYP.       CODE       9E6 
+MOVE                REL    CONST PUB UNTYP.       CODE       1486 
+MOVE1               REL    CONST UNTYP.           CODE       14A2 
+MOVE2               REL    CONST UNTYP.           CODE       14A6 
+MPLUS               REL    CONST PUB UNTYP.       CODE       258 
+MPY                 ABS    CONST UNTYP.           ASEG       4C0 
+MPY32CTL0           ABS    CONST UNTYP.           ASEG       4EC 
+MPY32CTL0_H         ABS    CONST UNTYP.           ASEG       4ED 
+MPY32CTL0_L         ABS    CONST UNTYP.           ASEG       4EC 
+MPY32H              ABS    CONST UNTYP.           ASEG       4D2 
+MPY32H_H            ABS    CONST UNTYP.           ASEG       4D3 
+MPY32H_L            ABS    CONST UNTYP.           ASEG       4D2 
+MPY32L              ABS    CONST UNTYP.           ASEG       4D0 
+MPY32L_H            ABS    CONST UNTYP.           ASEG       4D1 
+MPY32L_L            ABS    CONST UNTYP.           ASEG       4D0 
+MPYS                ABS    CONST UNTYP.           ASEG       4C2 
+MPYS32H             ABS    CONST UNTYP.           ASEG       4D6 
+MPYS32H_H           ABS    CONST UNTYP.           ASEG       4D7 
+MPYS32H_L           ABS    CONST UNTYP.           ASEG       4D6 
+MPYS32L             ABS    CONST UNTYP.           ASEG       4D4 
+MPYS32L_H           ABS    CONST UNTYP.           ASEG       4D5 
+MPYS32L_L           ABS    CONST UNTYP.           ASEG       4D4 
+MPYS_H              ABS    CONST UNTYP.           ASEG       4C3 
+MPYS_L              ABS    CONST UNTYP.           ASEG       4C2 
+MPYU                REL    CONST UNTYP.           CODE       4B8 
+MPY_H               ABS    CONST UNTYP.           ASEG       4C1 
+MPY_L               ABS    CONST UNTYP.           ASEG       4C0 
+MS                  REL    CONST PUB UNTYP.       CODE       1508 
+MSTAR               REL    CONST PUB UNTYP.       CODE       938 
+NEGATE              REL    CONST PUB UNTYP.       CODE       2C4 
+NEQUAL              REL    CONST PUB UNTYP.       CODE       600 
+NEWEST              REL    CONST PUB UNTYP.       CODE       82A 
+NFATOCFA            REL    CONST PUB UNTYP.       CODE       E6E 
+NFATOLFA            REL    CONST PUB UNTYP.       CODE       E58 
+NINIT               REL    CONST PUB UNTYP.       CODE       896 
+NIP                 REL    CONST PUB UNTYP.       CODE       150 
+NODUP               REL    CONST UNTYP.           CODE       EA 
+NOOP                REL    CONST PUB UNTYP.       CODE       154C 
+NOTEQUAL            REL    CONST PUB UNTYP.       CODE       392 
+NUM                 REL    CONST PUB UNTYP.       CODE       CB0 
+NUMGREATER          REL    CONST PUB UNTYP.       CODE       CDC 
+NUMS                REL    CONST PUB UNTYP.       CODE       CC6 
+NUMS1               REL    CONST UNTYP.           CODE       CC8 
+ONEMINUS            REL    CONST PUB UNTYP.       CODE       2E2 
+ONEMS               REL    CONST PUB UNTYP.       CODE       14E2 
+ONEPLUS             REL    CONST PUB UNTYP.       CODE       2D4 
+OP2                 ABS    CONST UNTYP.           ASEG       4C8 
+OP2H                ABS    CONST UNTYP.           ASEG       4E2 
+OP2H_H              ABS    CONST UNTYP.           ASEG       4E3 
+OP2H_L              ABS    CONST UNTYP.           ASEG       4E2 
+OP2L                ABS    CONST UNTYP.           ASEG       4E0 
+OP2L_H              ABS    CONST UNTYP.           ASEG       4E1 
+OP2L_L              ABS    CONST UNTYP.           ASEG       4E0 
+OP2_H               ABS    CONST UNTYP.           ASEG       4C9 
+OP2_L               ABS    CONST UNTYP.           ASEG       4C8 
+ORR                 REL    CONST PUB UNTYP.       CODE       290 
+OVER                REL    CONST PUB UNTYP.       CODE       11C 
+P1IV                ABS    CONST UNTYP.           ASEG       20E 
+P2IV                ABS    CONST UNTYP.           ASEG       21E 
+PAD                 REL    CONST PUB UNTYP.       CODE       844 
+PADAREA             ABS    CONST EXT [002] UNTYP. __EXTERNS  Solved Extern 
+PADIR               ABS    CONST UNTYP.           ASEG       204 
+PADIR_H             ABS    CONST UNTYP.           ASEG       205 
+PADIR_L             ABS    CONST UNTYP.           ASEG       204 
+PAIE                ABS    CONST UNTYP.           ASEG       21A 
+PAIES               ABS    CONST UNTYP.           ASEG       218 
+PAIES_H             ABS    CONST UNTYP.           ASEG       219 
+PAIES_L             ABS    CONST UNTYP.           ASEG       218 
+PAIE_H              ABS    CONST UNTYP.           ASEG       21B 
+PAIE_L              ABS    CONST UNTYP.           ASEG       21A 
+PAIFG               ABS    CONST UNTYP.           ASEG       21C 
+PAIFG_H             ABS    CONST UNTYP.           ASEG       21D 
+PAIFG_L             ABS    CONST UNTYP.           ASEG       21C 
+PAIN                ABS    CONST UNTYP.           ASEG       200 
+PAIN_H              ABS    CONST UNTYP.           ASEG       201 
+PAIN_L              ABS    CONST UNTYP.           ASEG       200 
+PAOUT               ABS    CONST UNTYP.           ASEG       202 
+PAOUT_H             ABS    CONST UNTYP.           ASEG       203 
+PAOUT_L             ABS    CONST UNTYP.           ASEG       202 
+PAREN               ABS    CONST UNTYP.           ASEG       206 
+PAREN_H             ABS    CONST UNTYP.           ASEG       207 
+PAREN_L             ABS    CONST UNTYP.           ASEG       206 
+PASEL0              ABS    CONST UNTYP.           ASEG       20A 
+PASEL0_H            ABS    CONST UNTYP.           ASEG       20B 
+PASEL0_L            ABS    CONST UNTYP.           ASEG       20A 
+PASEL1              ABS    CONST UNTYP.           ASEG       20C 
+PASEL1_H            ABS    CONST UNTYP.           ASEG       20D 
+PASEL1_L            ABS    CONST UNTYP.           ASEG       20C 
+PBDIR               ABS    CONST UNTYP.           ASEG       224 
+PBDIR_H             ABS    CONST UNTYP.           ASEG       225 
+PBDIR_L             ABS    CONST UNTYP.           ASEG       224 
+PBIN                ABS    CONST UNTYP.           ASEG       220 
+PBIN_H              ABS    CONST UNTYP.           ASEG       221 
+PBIN_L              ABS    CONST UNTYP.           ASEG       220 
+PBOUT               ABS    CONST UNTYP.           ASEG       222 
+PBOUT_H             ABS    CONST UNTYP.           ASEG       223 
+PBOUT_L             ABS    CONST UNTYP.           ASEG       222 
+PBREN               ABS    CONST UNTYP.           ASEG       226 
+PBREN_H             ABS    CONST UNTYP.           ASEG       227 
+PBREN_L             ABS    CONST UNTYP.           ASEG       226 
+PBSEL0              ABS    CONST UNTYP.           ASEG       22A 
+PBSEL0_H            ABS    CONST UNTYP.           ASEG       22B 
+PBSEL0_L            ABS    CONST UNTYP.           ASEG       22A 
+PBSEL1              ABS    CONST UNTYP.           ASEG       22C 
+PBSEL1_H            ABS    CONST UNTYP.           ASEG       22D 
+PBSEL1_L            ABS    CONST UNTYP.           ASEG       22C 
+PLUS                REL    CONST PUB UNTYP.       CODE       238 
+PLUSLOOP            REL    CONST PUB UNTYP.       CODE       143A 
+PLUSSTORE           REL    CONST PUB UNTYP.       CODE       246 
+PM5CTL0             ABS    CONST UNTYP.           ASEG       130 
+PM5CTL0_H           ABS    CONST UNTYP.           ASEG       131 
+PM5CTL0_L           ABS    CONST UNTYP.           ASEG       130 
+PMMCTL0             ABS    CONST UNTYP.           ASEG       120 
+PMMCTL0_H           ABS    CONST UNTYP.           ASEG       121 
+PMMCTL0_L           ABS    CONST UNTYP.           ASEG       120 
+PMMCTL1             ABS    CONST UNTYP.           ASEG       122 
+PMMCTL1_H           ABS    CONST UNTYP.           ASEG       123 
+PMMCTL1_L           ABS    CONST UNTYP.           ASEG       122 
+PMMCTL2             ABS    CONST UNTYP.           ASEG       124 
+PMMCTL2_H           ABS    CONST UNTYP.           ASEG       125 
+PMMCTL2_L           ABS    CONST UNTYP.           ASEG       124 
+PMMIE               ABS    CONST UNTYP.           ASEG       12E 
+PMMIE_H             ABS    CONST UNTYP.           ASEG       12F 
+PMMIE_L             ABS    CONST UNTYP.           ASEG       12E 
+PMMIFG              ABS    CONST UNTYP.           ASEG       12A 
+PMMIFG_H            ABS    CONST UNTYP.           ASEG       12B 
+PMMIFG_L            ABS    CONST UNTYP.           ASEG       12A 
+POST1               REL    CONST UNTYP.           CODE       1312 
+POST2               REL    CONST UNTYP.           CODE       1314 
+POSTPONE            REL    CONST PUB UNTYP.       CODE       12E8 
+PROTECT             REL    CONST PUB UNTYP.       CODE       16E0 
+PSTACK              ABS    CONST EXT [004] UNTYP. __EXTERNS  Solved Extern 
+PUSHTOS             REL    CONST UNTYP.           CODE       D2 
+QABO1               REL    CONST UNTYP.           CODE       1116 
+QABORT              REL    CONST PUB UNTYP.       CODE       110A 
+QDNEGATE            REL    CONST PUB UNTYP.       CODE       916 
+QDUP                REL    CONST PUB UNTYP.       CODE       E4 
+QNEG1               REL    CONST UNTYP.           CODE       8DA 
+QNEGATE             REL    CONST PUB UNTYP.       CODE       8D0 
+QNUM1               REL    CONST UNTYP.           CODE       FF6 
+QNUM2               REL    CONST UNTYP.           CODE       1002 
+QNUM3               REL    CONST UNTYP.           CODE       1006 
+QNUMBER             REL    CONST PUB UNTYP.       CODE       FD0 
+QSIGN               REL    CONST PUB UNTYP.       CODE       F58 
+QSIGN1              REL    CONST UNTYP.           CODE       F82 
+QUIT                REL    CONST PUB UNTYP.       CODE       10AA 
+QUIT1               REL    CONST UNTYP.           CODE       10BE 
+QUIT2               REL    CONST UNTYP.           CODE       10EA 
+RAMDICT             ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+RECURSE             REL    CONST PUB UNTYP.       CODE       1222 
+REPEAT              REL    CONST PUB UNTYP.       CODE       13AE 
+RES0                ABS    CONST UNTYP.           ASEG       4E4 
+RES0_H              ABS    CONST UNTYP.           ASEG       4E5 
+RES0_L              ABS    CONST UNTYP.           ASEG       4E4 
+RES1                ABS    CONST UNTYP.           ASEG       4E6 
+RES1_H              ABS    CONST UNTYP.           ASEG       4E7 
+RES1_L              ABS    CONST UNTYP.           ASEG       4E6 
+RES2                ABS    CONST UNTYP.           ASEG       4E8 
+RES2_H              ABS    CONST UNTYP.           ASEG       4E9 
+RES2_L              ABS    CONST UNTYP.           ASEG       4E8 
+RES3                ABS    CONST UNTYP.           ASEG       4EA 
+RES3_H              ABS    CONST UNTYP.           ASEG       4EB 
+RES3_L              ABS    CONST UNTYP.           ASEG       4EA 
+RESHI               ABS    CONST UNTYP.           ASEG       4CC 
+RESHI_H             ABS    CONST UNTYP.           ASEG       4CD 
+RESHI_L             ABS    CONST UNTYP.           ASEG       4CC 
+RESLO               ABS    CONST UNTYP.           ASEG       4CA 
+RESLO_H             ABS    CONST UNTYP.           ASEG       4CB 
+RESLO_L             ABS    CONST UNTYP.           ASEG       4CA 
+REVEAL              REL    CONST PUB UNTYP.       CODE       127A 
+RFETCH              REL    CONST PUB UNTYP.       CODE       182 
+RFROM               REL    CONST PUB UNTYP.       CODE       16E 
+RIGHTBRACKET        REL    CONST PUB UNTYP.       CODE       1246 
+ROMDICT             ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+ROT                 REL    CONST PUB UNTYP.       CODE       134 
+RPFETCH             REL    CONST PUB UNTYP.       CODE       1C0 
+RPSTORE             REL    CONST PUB UNTYP.       CODE       1D6 
+RSHIFT              REL    CONST PUB UNTYP.       CODE       33E 
+RSH_1               REL    CONST UNTYP.           CODE       348 
+RSH_X               REL    CONST UNTYP.           CODE       350 
+RSTACK              ABS    CONST EXT [005] UNTYP. __EXTERNS  Solved Extern 
+RTCCNT              ABS    CONST UNTYP.           ASEG       30C 
+RTCCNT_H            ABS    CONST UNTYP.           ASEG       30D 
+RTCCNT_L            ABS    CONST UNTYP.           ASEG       30C 
+RTCCTL              ABS    CONST UNTYP.           ASEG       300 
+RTCCTL_H            ABS    CONST UNTYP.           ASEG       301 
+RTCCTL_L            ABS    CONST UNTYP.           ASEG       300 
+RTCIV               ABS    CONST UNTYP.           ASEG       304 
+RTCIV_H             ABS    CONST UNTYP.           ASEG       305 
+RTCIV_L             ABS    CONST UNTYP.           ASEG       304 
+RTCMOD              ABS    CONST UNTYP.           ASEG       308 
+RTCMOD_H            ABS    CONST UNTYP.           ASEG       309 
+RTCMOD_L            ABS    CONST UNTYP.           ASEG       308 
+RZERO               REL    CONST PUB UNTYP.       CODE       858 
+S0                  REL    CONST PUB UNTYP.       CODE       862 
+SCAN                REL    CONST PUB UNTYP.       CODE       5B4 
+SCAN_1              REL    CONST UNTYP.           CODE       5BE 
+SCAN_X              REL    CONST UNTYP.           CODE       5C8 
+SEMICOLON           REL    CONST PUB UNTYP.       CODE       12BC 
+SEQUAL              REL    CONST PUB UNTYP.       CODE       5D8 
+SEQU_1              REL    CONST UNTYP.           CODE       5E2 
+SEQU_X              REL    CONST UNTYP.           CODE       5F6 
+SFRIE1              ABS    CONST UNTYP.           ASEG       100 
+SFRIE1_H            ABS    CONST UNTYP.           ASEG       101 
+SFRIE1_L            ABS    CONST UNTYP.           ASEG       100 
+SFRIFG1             ABS    CONST UNTYP.           ASEG       102 
+SFRIFG1_H           ABS    CONST UNTYP.           ASEG       103 
+SFRIFG1_L           ABS    CONST UNTYP.           ASEG       102 
+SFRRPCR             ABS    CONST UNTYP.           ASEG       104 
+SFRRPCR_H           ABS    CONST UNTYP.           ASEG       105 
+SFRRPCR_L           ABS    CONST UNTYP.           ASEG       104 
+SIGN                REL    CONST PUB UNTYP.       CODE       CF4 
+SIGN1               REL    CONST UNTYP.           CODE       D02 
+SKIP                REL    CONST PUB UNTYP.       CODE       58E 
+SKIP_1              REL    CONST UNTYP.           CODE       598 
+SKIP_X              REL    CONST UNTYP.           CODE       5A2 
+SLASH               REL    CONST PUB UNTYP.       CODE       9D6 
+SLASHMOD            REL    CONST PUB UNTYP.       CODE       9C4 
+SLASHSTRING         REL    CONST PUB UNTYP.       CODE       DD4 
+SMISMATCH           REL    CONST UNTYP.           CODE       5F0 
+SMSLASHREM          REL    CONST PUB UNTYP.       CODE       95A 
+SOURCE              REL    CONST PUB UNTYP.       CODE       DC0 
+SPACE               REL    CONST PUB UNTYP.       CODE       AF2 
+SPACES              REL    CONST PUB UNTYP.       CODE       B04 
+SPCS1               REL    CONST UNTYP.           CODE       B06 
+SPCS2               REL    CONST UNTYP.           CODE       B14 
+SPFETCH             REL    CONST PUB UNTYP.       CODE       198 
+SPSTORE             REL    CONST PUB UNTYP.       CODE       1AE 
+SQUOTE              REL    CONST PUB UNTYP.       CODE       BF2 
+SSMOD               REL    CONST PUB UNTYP.       CODE       9F8 
+STAR                REL    CONST PUB UNTYP.       CODE       9B4 
+STARSLASH           REL    CONST PUB UNTYP.       CODE       A0A 
+STATE               REL    CONST PUB UNTYP.       CODE       7D4 
+STOD                REL    CONST PUB UNTYP.       CODE       8BC 
+STORCOLON           REL    CONST PUB UNTYP.       CODE       738 
+STORE               REL    CONST PUB UNTYP.       CODE       204 
+STORECF             REL    CONST PUB UNTYP.       CODE       6EA 
+STOREDEST           REL    CONST PUB UNTYP.       CODE       78A 
+SUMEXT              ABS    CONST UNTYP.           ASEG       4CE 
+SUMEXT_H            ABS    CONST UNTYP.           ASEG       4CF 
+SUMEXT_L            ABS    CONST UNTYP.           ASEG       4CE 
+SWAP                REL    CONST PUB UNTYP.       CODE       106 
+SWAPBYTES           REL    CONST PUB UNTYP.       CODE       2F0 
+SYSBERRIV           ABS    CONST UNTYP.           ASEG       158 
+SYSBERRIV_H         ABS    CONST UNTYP.           ASEG       159 
+SYSBERRIV_L         ABS    CONST UNTYP.           ASEG       158 
+SYSBSLC             ABS    CONST UNTYP.           ASEG       142 
+SYSBSLC_H           ABS    CONST UNTYP.           ASEG       143 
+SYSBSLC_L           ABS    CONST UNTYP.           ASEG       142 
+SYSCFG0             ABS    CONST UNTYP.           ASEG       160 
+SYSCFG0_H           ABS    CONST UNTYP.           ASEG       161 
+SYSCFG0_L           ABS    CONST UNTYP.           ASEG       160 
+SYSCFG1             ABS    CONST UNTYP.           ASEG       162 
+SYSCFG1_H           ABS    CONST UNTYP.           ASEG       163 
+SYSCFG1_L           ABS    CONST UNTYP.           ASEG       162 
+SYSCFG2             ABS    CONST UNTYP.           ASEG       164 
+SYSCFG2_H           ABS    CONST UNTYP.           ASEG       165 
+SYSCFG2_L           ABS    CONST UNTYP.           ASEG       164 
+SYSCTL              ABS    CONST UNTYP.           ASEG       140 
+SYSCTL_H            ABS    CONST UNTYP.           ASEG       141 
+SYSCTL_L            ABS    CONST UNTYP.           ASEG       140 
+SYSJMBC             ABS    CONST UNTYP.           ASEG       146 
+SYSJMBC_H           ABS    CONST UNTYP.           ASEG       147 
+SYSJMBC_L           ABS    CONST UNTYP.           ASEG       146 
+SYSJMBI0            ABS    CONST UNTYP.           ASEG       148 
+SYSJMBI0_H          ABS    CONST UNTYP.           ASEG       149 
+SYSJMBI0_L          ABS    CONST UNTYP.           ASEG       148 
+SYSJMBI1            ABS    CONST UNTYP.           ASEG       14A 
+SYSJMBI1_H          ABS    CONST UNTYP.           ASEG       14B 
+SYSJMBI1_L          ABS    CONST UNTYP.           ASEG       14A 
+SYSJMBO0            ABS    CONST UNTYP.           ASEG       14C 
+SYSJMBO0_H          ABS    CONST UNTYP.           ASEG       14D 
+SYSJMBO0_L          ABS    CONST UNTYP.           ASEG       14C 
+SYSJMBO1            ABS    CONST UNTYP.           ASEG       14E 
+SYSJMBO1_H          ABS    CONST UNTYP.           ASEG       14F 
+SYSJMBO1_L          ABS    CONST UNTYP.           ASEG       14E 
+SYSRSTIV            ABS    CONST UNTYP.           ASEG       15E 
+SYSRSTIV_H          ABS    CONST UNTYP.           ASEG       15F 
+SYSRSTIV_L          ABS    CONST UNTYP.           ASEG       15E 
+SYSSNIV             ABS    CONST UNTYP.           ASEG       15C 
+SYSSNIV_H           ABS    CONST UNTYP.           ASEG       15D 
+SYSSNIV_L           ABS    CONST UNTYP.           ASEG       15C 
+SYSUNIV             ABS    CONST UNTYP.           ASEG       15A 
+SYSUNIV_H           ABS    CONST UNTYP.           ASEG       15B 
+SYSUNIV_L           ABS    CONST UNTYP.           ASEG       15A 
+TA0CCR0             ABS    CONST UNTYP.           ASEG       392 
+TA0CCR1             ABS    CONST UNTYP.           ASEG       394 
+TA0CCR2             ABS    CONST UNTYP.           ASEG       396 
+TA0CCTL0            ABS    CONST UNTYP.           ASEG       382 
+TA0CCTL1            ABS    CONST UNTYP.           ASEG       384 
+TA0CCTL2            ABS    CONST UNTYP.           ASEG       386 
+TA0CTL              ABS    CONST UNTYP.           ASEG       380 
+TA0EX0              ABS    CONST UNTYP.           ASEG       3A0 
+TA0IV               ABS    CONST UNTYP.           ASEG       3AE 
+TA0R                ABS    CONST UNTYP.           ASEG       390 
+TA1CCR0             ABS    CONST UNTYP.           ASEG       3D2 
+TA1CCR1             ABS    CONST UNTYP.           ASEG       3D4 
+TA1CCR2             ABS    CONST UNTYP.           ASEG       3D6 
+TA1CCTL0            ABS    CONST UNTYP.           ASEG       3C2 
+TA1CCTL1            ABS    CONST UNTYP.           ASEG       3C4 
+TA1CCTL2            ABS    CONST UNTYP.           ASEG       3C6 
+TA1CTL              ABS    CONST UNTYP.           ASEG       3C0 
+TA1EX0              ABS    CONST UNTYP.           ASEG       3E0 
+TA1IV               ABS    CONST UNTYP.           ASEG       3EE 
+TA1R                ABS    CONST UNTYP.           ASEG       3D0 
+TA2CCR0             ABS    CONST UNTYP.           ASEG       412 
+TA2CCR1             ABS    CONST UNTYP.           ASEG       414 
+TA2CCTL0            ABS    CONST UNTYP.           ASEG       402 
+TA2CCTL1            ABS    CONST UNTYP.           ASEG       404 
+TA2CTL              ABS    CONST UNTYP.           ASEG       400 
+TA2EX0              ABS    CONST UNTYP.           ASEG       420 
+TA2IV               ABS    CONST UNTYP.           ASEG       42E 
+TA2R                ABS    CONST UNTYP.           ASEG       410 
+TA3CCR0             ABS    CONST UNTYP.           ASEG       452 
+TA3CCR1             ABS    CONST UNTYP.           ASEG       454 
+TA3CCTL0            ABS    CONST UNTYP.           ASEG       442 
+TA3CCTL1            ABS    CONST UNTYP.           ASEG       444 
+TA3CTL              ABS    CONST UNTYP.           ASEG       440 
+TA3EX0              ABS    CONST UNTYP.           ASEG       460 
+TA3IV               ABS    CONST UNTYP.           ASEG       46E 
+TA3R                ABS    CONST UNTYP.           ASEG       450 
+TASK                REL    CONST PUB UNTYP.       CODE       17F4 
+THEN                REL    CONST PUB UNTYP.       CODE       1332 
+TIB                 REL    CONST PUB UNTYP.       CODE       86E 
+TIBAREA             ABS    CONST EXT [006] UNTYP. __EXTERNS  Solved Extern 
+TIBSIZE             REL    CONST PUB UNTYP.       CODE       87E 
+TIB_SIZE            ABS    CONST EXT [007] UNTYP. __EXTERNS  Solved Extern 
+TICK                REL    CONST PUB UNTYP.       CODE       1136 
+TICKSOURCE          REL    CONST PUB UNTYP.       CODE       7EE 
+TOBODY              REL    CONST PUB UNTYP.       CODE       6D0 
+TOCOUNTED           REL    CONST PUB UNTYP.       CODE       DF0 
+TODIGIT             REL    CONST PUB UNTYP.       CODE       C90 
+TOIN                REL    CONST PUB UNTYP.       CODE       7BA 
+TOL                 REL    CONST PUB UNTYP.       CODE       13BC 
+TONUM1              REL    CONST UNTYP.           CODE       F92 
+TONUM2              REL    CONST UNTYP.           CODE       FA8 
+TONUM3              REL    CONST UNTYP.           CODE       FC2 
+TONUMBER            REL    CONST PUB UNTYP.       CODE       F90 
+TOR                 REL    CONST PUB UNTYP.       CODE       15E 
+TOSFALSE            REL    CONST UNTYP.           CODE       386 
+TOSTRUE             REL    CONST UNTYP.           CODE       3A8 
+TRUE                REL    CONST PUB UNTYP.       CODE       1532 
+TUCK                REL    CONST PUB UNTYP.       CODE       1E8 
+TWODROP             REL    CONST PUB UNTYP.       CODE       A74 
+TWODUP              REL    CONST PUB UNTYP.       CODE       A84 
+TWOFETCH            REL    CONST PUB UNTYP.       CODE       A48 
+TWOOVER             REL    CONST PUB UNTYP.       CODE       AAC 
+TWOSLASH            REL    CONST PUB UNTYP.       CODE       30C 
+TWOSTAR             REL    CONST PUB UNTYP.       CODE       2FE 
+TWOSTORE            REL    CONST PUB UNTYP.       CODE       A5C 
+TWOSWAP             REL    CONST PUB UNTYP.       CODE       A96 
+TYP3                REL    CONST UNTYP.           CODE       BC2 
+TYP4                REL    CONST UNTYP.           CODE       BD0 
+TYP5                REL    CONST UNTYP.           CODE       BD2 
+TYPE                REL    CONST PUB UNTYP.       CODE       BB2 
+U0                  REL    CONST PUB UNTYP.       CODE       7AE 
+UAREA               ABS    CONST EXT [001] UNTYP. __EXTERNS  Solved Extern 
+UAREA_SIZE          ABS    CONST EXT [008] UNTYP. __EXTERNS  Solved Extern 
+UCA0ABCTL           ABS    CONST UNTYP.           ASEG       510 
+UCA0BRW             ABS    CONST UNTYP.           ASEG       506 
+UCA0BRW_H           ABS    CONST UNTYP.           ASEG       507 
+UCA0BRW_L           ABS    CONST UNTYP.           ASEG       506 
+UCA0CTLW0           ABS    CONST UNTYP.           ASEG       500 
+UCA0CTLW0_H         ABS    CONST UNTYP.           ASEG       501 
+UCA0CTLW0_L         ABS    CONST UNTYP.           ASEG       500 
+UCA0CTLW1           ABS    CONST UNTYP.           ASEG       502 
+UCA0CTLW1_H         ABS    CONST UNTYP.           ASEG       503 
+UCA0CTLW1_L         ABS    CONST UNTYP.           ASEG       502 
+UCA0IE              ABS    CONST UNTYP.           ASEG       51A 
+UCA0IE_H            ABS    CONST UNTYP.           ASEG       51B 
+UCA0IE_L            ABS    CONST UNTYP.           ASEG       51A 
+UCA0IFG             ABS    CONST UNTYP.           ASEG       51C 
+UCA0IFG_H           ABS    CONST UNTYP.           ASEG       51D 
+UCA0IFG_L           ABS    CONST UNTYP.           ASEG       51C 
+UCA0IRCTL           ABS    CONST UNTYP.           ASEG       512 
+UCA0IRCTL_H         ABS    CONST UNTYP.           ASEG       513 
+UCA0IRCTL_L         ABS    CONST UNTYP.           ASEG       512 
+UCA0IV              ABS    CONST UNTYP.           ASEG       51E 
+UCA0MCTLW           ABS    CONST UNTYP.           ASEG       508 
+UCA0MCTLW_H         ABS    CONST UNTYP.           ASEG       509 
+UCA0MCTLW_L         ABS    CONST UNTYP.           ASEG       508 
+UCA0RXBUF           ABS    CONST UNTYP.           ASEG       50C 
+UCA0RXBUF_H         ABS    CONST UNTYP.           ASEG       50D 
+UCA0RXBUF_L         ABS    CONST UNTYP.           ASEG       50C 
+UCA0STATW           ABS    CONST UNTYP.           ASEG       50A 
+UCA0TXBUF           ABS    CONST UNTYP.           ASEG       50E 
+UCA0TXBUF_H         ABS    CONST UNTYP.           ASEG       50F 
+UCA0TXBUF_L         ABS    CONST UNTYP.           ASEG       50E 
+UCA1ABCTL           ABS    CONST UNTYP.           ASEG       530 
+UCA1BRW             ABS    CONST UNTYP.           ASEG       526 
+UCA1BRW_H           ABS    CONST UNTYP.           ASEG       527 
+UCA1BRW_L           ABS    CONST UNTYP.           ASEG       526 
+UCA1CTLW0           ABS    CONST UNTYP.           ASEG       520 
+UCA1CTLW0_H         ABS    CONST UNTYP.           ASEG       521 
+UCA1CTLW0_L         ABS    CONST UNTYP.           ASEG       520 
+UCA1CTLW1           ABS    CONST UNTYP.           ASEG       522 
+UCA1CTLW1_H         ABS    CONST UNTYP.           ASEG       523 
+UCA1CTLW1_L         ABS    CONST UNTYP.           ASEG       522 
+UCA1IE              ABS    CONST UNTYP.           ASEG       53A 
+UCA1IE_H            ABS    CONST UNTYP.           ASEG       53B 
+UCA1IE_L            ABS    CONST UNTYP.           ASEG       53A 
+UCA1IFG             ABS    CONST UNTYP.           ASEG       53C 
+UCA1IFG_H           ABS    CONST UNTYP.           ASEG       53D 
+UCA1IFG_L           ABS    CONST UNTYP.           ASEG       53C 
+UCA1IRCTL           ABS    CONST UNTYP.           ASEG       532 
+UCA1IRCTL_H         ABS    CONST UNTYP.           ASEG       533 
+UCA1IRCTL_L         ABS    CONST UNTYP.           ASEG       532 
+UCA1IV              ABS    CONST UNTYP.           ASEG       53E 
+UCA1MCTLW           ABS    CONST UNTYP.           ASEG       528 
+UCA1MCTLW_H         ABS    CONST UNTYP.           ASEG       529 
+UCA1MCTLW_L         ABS    CONST UNTYP.           ASEG       528 
+UCA1RXBUF           ABS    CONST UNTYP.           ASEG       52C 
+UCA1RXBUF_H         ABS    CONST UNTYP.           ASEG       52D 
+UCA1RXBUF_L         ABS    CONST UNTYP.           ASEG       52C 
+UCA1STATW           ABS    CONST UNTYP.           ASEG       52A 
+UCA1TXBUF           ABS    CONST UNTYP.           ASEG       52E 
+UCA1TXBUF_H         ABS    CONST UNTYP.           ASEG       52F 
+UCA1TXBUF_L         ABS    CONST UNTYP.           ASEG       52E 
+UCB0ADDMASK         ABS    CONST UNTYP.           ASEG       55E 
+UCB0ADDMASK_H       ABS    CONST UNTYP.           ASEG       55F 
+UCB0ADDMASK_L       ABS    CONST UNTYP.           ASEG       55E 
+UCB0ADDRX           ABS    CONST UNTYP.           ASEG       55C 
+UCB0ADDRX_H         ABS    CONST UNTYP.           ASEG       55D 
+UCB0ADDRX_L         ABS    CONST UNTYP.           ASEG       55C 
+UCB0BRW             ABS    CONST UNTYP.           ASEG       546 
+UCB0BRW_H           ABS    CONST UNTYP.           ASEG       547 
+UCB0BRW_L           ABS    CONST UNTYP.           ASEG       546 
+UCB0CTLW0           ABS    CONST UNTYP.           ASEG       540 
+UCB0CTLW0_H         ABS    CONST UNTYP.           ASEG       541 
+UCB0CTLW0_L         ABS    CONST UNTYP.           ASEG       540 
+UCB0CTLW1           ABS    CONST UNTYP.           ASEG       542 
+UCB0CTLW1_H         ABS    CONST UNTYP.           ASEG       543 
+UCB0CTLW1_L         ABS    CONST UNTYP.           ASEG       542 
+UCB0I2COA0          ABS    CONST UNTYP.           ASEG       554 
+UCB0I2COA0_H        ABS    CONST UNTYP.           ASEG       555 
+UCB0I2COA0_L        ABS    CONST UNTYP.           ASEG       554 
+UCB0I2COA1          ABS    CONST UNTYP.           ASEG       556 
+UCB0I2COA1_H        ABS    CONST UNTYP.           ASEG       557 
+UCB0I2COA1_L        ABS    CONST UNTYP.           ASEG       556 
+UCB0I2COA2          ABS    CONST UNTYP.           ASEG       558 
+UCB0I2COA2_H        ABS    CONST UNTYP.           ASEG       559 
+UCB0I2COA2_L        ABS    CONST UNTYP.           ASEG       558 
+UCB0I2COA3          ABS    CONST UNTYP.           ASEG       55A 
+UCB0I2COA3_H        ABS    CONST UNTYP.           ASEG       55B 
+UCB0I2COA3_L        ABS    CONST UNTYP.           ASEG       55A 
+UCB0I2CSA           ABS    CONST UNTYP.           ASEG       560 
+UCB0I2CSA_H         ABS    CONST UNTYP.           ASEG       561 
+UCB0I2CSA_L         ABS    CONST UNTYP.           ASEG       560 
+UCB0IE              ABS    CONST UNTYP.           ASEG       56A 
+UCB0IE_H            ABS    CONST UNTYP.           ASEG       56B 
+UCB0IE_L            ABS    CONST UNTYP.           ASEG       56A 
+UCB0IFG             ABS    CONST UNTYP.           ASEG       56C 
+UCB0IFG_H           ABS    CONST UNTYP.           ASEG       56D 
+UCB0IFG_L           ABS    CONST UNTYP.           ASEG       56C 
+UCB0IV              ABS    CONST UNTYP.           ASEG       56E 
+UCB0RXBUF           ABS    CONST UNTYP.           ASEG       54C 
+UCB0RXBUF_H         ABS    CONST UNTYP.           ASEG       54D 
+UCB0RXBUF_L         ABS    CONST UNTYP.           ASEG       54C 
+UCB0STATW           ABS    CONST UNTYP.           ASEG       548 
+UCB0STATW_H         ABS    CONST UNTYP.           ASEG       549 
+UCB0STATW_L         ABS    CONST UNTYP.           ASEG       548 
+UCB0TBCNT           ABS    CONST UNTYP.           ASEG       54A 
+UCB0TBCNT_H         ABS    CONST UNTYP.           ASEG       54B 
+UCB0TBCNT_L         ABS    CONST UNTYP.           ASEG       54A 
+UCB0TXBUF           ABS    CONST UNTYP.           ASEG       54E 
+UCB0TXBUF_H         ABS    CONST UNTYP.           ASEG       54F 
+UCB0TXBUF_L         ABS    CONST UNTYP.           ASEG       54E 
+UDOT                REL    CONST PUB UNTYP.       CODE       D0A 
+UDOTR               REL    CONST PUB UNTYP.       CODE       1588 
+UDSLASHMOD          REL    CONST PUB UNTYP.       CODE       C26 
+UDSTAR              REL    CONST PUB UNTYP.       CODE       C46 
+UGREATER            REL    CONST PUB UNTYP.       CODE       3D2 
+ULESS               REL    CONST PUB UNTYP.       CODE       3C2 
+UMAX                REL    CONST PUB UNTYP.       CODE       B38 
+UMAX1               REL    CONST UNTYP.           CODE       B44 
+UMIN                REL    CONST PUB UNTYP.       CODE       B20 
+UMIN1               REL    CONST UNTYP.           CODE       B2C 
+UMSLASHMOD          REL    CONST PUB UNTYP.       CODE       4E4 
+UMSTAR              REL    CONST PUB UNTYP.       CODE       4B4 
+UNLOOP              REL    CONST PUB UNTYP.       CODE       4A2 
+UNTIL               REL    CONST PUB UNTYP.       CODE       1370 
+UP                  ABS    CONST EXT [000] UNTYP. __EXTERNS  Solved Extern 
+USER                REL    CONST PUB UNTYP.       CODE       98 
+VARIABLE            REL    CONST PUB UNTYP.       CODE       4E 
+VECS_SIZE           ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+WARM                REL    CONST PUB UNTYP.       CODE       17DA 
+WARMIP              REL    CONST PUB UNTYP.       CODE       17DC 
+WDS1                REL    CONST UNTYP.           CODE       1562 
+WDTCTL              ABS    CONST UNTYP.           ASEG       1CC 
+WDTCTL_H            ABS    CONST UNTYP.           ASEG       1CD 
+WDTCTL_L            ABS    CONST UNTYP.           ASEG       1CC 
+WHILE               REL    CONST PUB UNTYP.       CODE       139C 
+WITHIN              REL    CONST PUB UNTYP.       CODE       146E 
+WORD1               REL    CONST UNTYP.           CODE       E2A 
+WORDD               REL    CONST PUB UNTYP.       CODE       E06 
+WORDS               REL    CONST PUB UNTYP.       CODE       155A 
+XDOES               REL    CONST PUB UNTYP.       CODE       11EE 
+XORR                REL    CONST PUB UNTYP.       CODE       2A0 
+XSQUOTE             REL    CONST PUB UNTYP.       CODE       BDC 
+ZEROEQUAL           REL    CONST PUB UNTYP.       CODE       35C 
+ZEROLESS            REL    CONST PUB UNTYP.       CODE       36C 
+__MSP430FR2532__    ABS    CONST UNTYP.           ASEG       Not solved 
+bran                REL    CONST PUB UNTYP.       CODE       3E4 
+cory                ABS    CONST EXT [011] UNTYP. __EXTERNS  Solved Extern 
+dcn                 REL    CONST PUB UNTYP.       CODE       179C 
+dobran              REL    CONST UNTYP.           CODE       3E6 
+docreate            REL    CONST PUB UNTYP.       CODE       58 
+dodoes              REL    CONST PUB UNTYP.       CODE       B4 
+donext              REL    CONST UNTYP.           CODE       636 
+donoop              REL    CONST PUB UNTYP.       CODE       636 
+fenceadr            REL    CONST PUB UNTYP.       CODE       17EC 
+initDECON           ABS    CONST EXT [009] UNTYP. __EXTERNS  Solved Extern 
+intvecs             ABS    CONST EXT [010] UNTYP. __EXTERNS  Solved Extern 
+lastword            REL    CONST PUB UNTYP.       CODE       17EF 
+link                REL    VAR UNTYP.             CODE       17EF 
+lit                 REL    CONST PUB UNTYP.       CODE       1C 
+ms1                 REL    CONST UNTYP.           CODE       1510 
+nullirq             ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+onems1              REL    CONST UNTYP.           CODE       14EE 
+onems2              REL    CONST UNTYP.           CODE       14F8 
+qbran               REL    CONST PUB UNTYP.       CODE       3F8 
+srtA                ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+xdo                 REL    CONST PUB UNTYP.       CODE       40E 
+xloop               REL    CONST PUB UNTYP.       CODE       434 
+xplusloop           REL    CONST PUB UNTYP.       CODE       454 
+
+
+##############################
+#          CRC:E6F5          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#        Bytes: 6136         #
+##############################
+
+
+
+

@@ -1,0 +1,899 @@
+###############################################################################
+#                                                                             #
+#     IAR Assembler V6.30.1.934/W32  for MSP430 01/Apr/2016  21:03:26         #
+#     Copyright 1996-2015 IAR Systems AB.                                     #
+#                                                                             #
+#           Target option =  MSP430X                                          #
+#           Source file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\init430FR5739.s43#
+#           List file     =  C:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\Debug\List\init430FR5739.lst#
+#           Object file   =  C:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\Debug\Obj\init430FR5739.r43#
+#           Command line  =  C:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\init430FR5739.s43 #
+#                            -OC:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\Debug\Obj\ #
+#                            -s+ -M<> -w+                                     #
+#                            -LC:\Users\mka\Documents\GitHub\CF430FR2433-ChipStick\Debug\List\ #
+#                            -t8 -x -r -D__MSP430FR2033__ -v1                 #
+#                            -IC:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2\430\INC\ #
+#                                                                             #
+###############################################################################
+
+      1    000000              ; CPU Configuration - MSP430FR5739  ; M.Kalus
+                                Juli 2011
+      2    000000              ; Template was: init430f1611.s43 
+      3    000000              ; for TI MSP430F1611 by B. Rodriguez  3 Jan
+                                09
+      4    000000              
+      5    000000              ; ----------------------------------------------
+                               ------------------------
+      6    000000              ; CamelForth for the Texas Instruments MSP430
+                                
+      7    000000              ; (c) 2009 Bradford J. Rodriguez.
+      8    000000              ; 
+      9    000000              ; This program is free software; you can
+                                redistribute it and/or modify
+     10    000000              ; it under the terms of the GNU General Public
+                                License as published by
+     11    000000              ; the Free Software Foundation; either version 3
+                                of the License, or
+     12    000000              ; (at your option) any later version.
+     13    000000              ;
+     14    000000              ; This program is distributed in the hope that
+                                it will be useful,
+     15    000000              ; but WITHOUT ANY WARRANTY; without even the
+                                implied warranty of
+     16    000000              ; MERCHANTABILITY or FITNESS FOR A PARTICULAR
+                                PURPOSE.  See the
+     17    000000              ; GNU General Public License for more details.
+     18    000000              ;
+     19    000000              ; You should have received a copy of the GNU
+                                General Public License
+     20    000000              ; along with this program.  If not, see
+                                <http://www.gnu.org/licenses/>.
+     21    000000              ;
+     22    000000              ; Commercial inquiries should be directed to the
+                                author at 
+     23    000000              ; 115 First St., #105, Collingwood, Ontario L9Y
+                                4W3 Canada
+     24    000000              ; or via email to bj@camelforth.com
+     25    000000              
+     26    000000              ; ----------------------------------------------
+                               ------------------------
+     27    000000              ; This configuration is for the Texas Instrument
+                                (TI)
+     28    000000              ; MSP-EXP430FR5739 FRAM Experimentation board,
+                                
+     29    000000              ; and its TI MSP430FR5739 microcontroller.
+     30    000000              ; It has this I/O assignments:
+     31    000000              
+     32    000000              ; J3 (5xjumper), silkscreen printing: 
+     33    000000              ; "TEST" - FR5739 pin19 = TEST 
+     34    000000              ; "RST"  - FR5739 pin20 = RST  
+     35    000000              ; "RXD"  - FR5739 pin22 = P2.1 == UCA0RXD -->
+                                UCA0RXDBUF
+     36    000000              ; "TXD"  - FR5739 pin21 = P2.0 == UCA0TXD <--
+                                UCA0TXDBUf
+     37    000000              ; "VCC"  - + upper side 
+     38    000000              
+     39    000000              ; 8x blue LEDs in a row.   (portpinX->---resisto
+                               r---LED---GND) 
+     40    000000              ; PJ.0 - LED1 
+     41    000000              ; PJ.1 - LED2 
+     42    000000              ; PJ.2 - LED3 
+     43    000000              ; PJ.3 - LED4 
+     44    000000              ; P3.4 - LED5 
+     45    000000              ; P3.5 - LED6 
+     46    000000              ; P3.6 - LED7 
+     47    000000              ; P3.7 - LED8 
+     48    000000              ;
+     49    000000              ; I/O pins on SV1: 
+     50    000000              ; P1.0 - SV1.1  
+     51    000000              ; P1.1 - SV1.2  
+     52    000000              ; P1.2 - SV1.3  
+     53    000000              ; P3.0 - SV1.4  
+     54    000000              ; P3.1 - SV1.5  
+     55    000000              ; P3.2 - SV1.6  
+     56    000000              ; P3.3 - SV1.7  
+     57    000000              ; P1.3 - SV1.8  
+     58    000000              ; P1.4 - SV1.9  
+     59    000000              ; P1.5 - SV1.10 
+     60    000000              ; P4.0 - SV1.11 
+     61    000000              ; GND  - SV1.12 
+     62    000000              
+     63    000000              ; I/O pins on SV2: 
+     64    000000              ; P1.7 - SV1.1  
+     65    000000              ; P1.6 - SV1.2  
+     66    000000              ; P3.7 - SV1.3  
+     67    000000              ; P3.6 - SV1.4  
+     68    000000              ; P3.5 - SV1.5  
+     69    000000              ; P3.4 - SV1.6  
+     70    000000              ; P2.2 - SV1.7  
+     71    000000              ; P2.1 - SV1.8  
+     72    000000              ; P2.6 - SV1.9  
+     73    000000              ; P2.5 - SV1.10 
+     74    000000              ; P2.0 - SV1.11 
+     75    000000              ; VCC  - SV1.12 
+     76    000000              
+     77    000000              ; Accelerometer: 
+     78    000000              ; P2.7 - VS 
+     79    000000              ; P3.0 - XOUT 
+     80    000000              ; P3.1 - YOUT 
+     81    000000              ; P3.2 - ZOUT 
+     82    000000              
+     83    000000              ; LDR and NTC: 
+     84    000000              ; P2.7 - VS 
+     85    000000              ; P3.3 - LDR 
+     86    000000              ; P1.4 - NTC
+     87    000000              
+     88    000000              ; switch-keys:
+     89    000000              ; P4.0 - S1 
+     90    000000              ; P4.1 - S2 
+     91    000000              ; RES - reset 
+     92    000000              
+     93    000000              ; Clocks:
+     94    000000              ; 8 MHz DCO intern
+     95    000000              
+     96    000000              ; RF1,2,3 --> see TI document slau343.pdf
+                                
+     97    000000              
+     98    000000              ; ----------------------------------------------
+                               ------------------------
+     99    000000              ; CamelForth RAM memory map:
+    100    000000              ;   UP          User Pointer, 2 bytes
+    101    000000              ;   UAREA       User area, 32 bytes
+    102    000000              ;   UAREA+20h   HOLD area, 40 bytes, grows down
+                                from end
+    103    000000              ;   UAREA+48h   PAD buffer, 88 bytes, must
+                                follow HOLD area
+    104    000000              ;   UAREA+A0h   Parameter stack, 128 B, grows
+                                down from end
+    105    000000              ;   UAREA+120h  Return stack, 128 B, grows down
+                                from end
+    106    000000              ;   UAREA+1A0h  TIB Terminal Input Buffer, 88
+                                bytes
+    107    000000              
+    108    000000              ; Note all must be word-aligned.
+    109    000000              ; See also the definitions of U0, S0, and R0 in
+                                the "system variables &
+    110    000000              ; constants" area.  A task w/o terminal input
+                                requires 200h bytes.
+    111    000000              ; Double all except TIB and PAD for 32-bit
+                                CPUs.
+    112    000000              
+    113    000000              
+    114    000000              ; RAM map
+    115    000000              ; name     celles  comment
+    116    000000                                 ; -----
+    117    000010              UAREA_SIZE  = 16   ; UAREA 32 bytes
+    118    000000                                 ; -----
+    119    000000                                 ; | LSTACK: leave stack
+                                
+    120    000000                                 ; | grows up 
+    121    000000                                 ; | 
+    122    000000                                 ; V
+    123    000000                                 ;   128 bytes
+    124    000000                                 ; ^
+    125    000000                                 ; |
+    126    000000                                 ; | grows down
+    127    000036              PSTACK_SIZE = 54   ; | PSTACK: top of parameter
+                                stack area. 
+    128    000000                                 ; -----
+    129    000000                                 ;   128 bytes
+    130    000000                                 ; ^
+    131    000000                                 ; |
+    132    000000                                 ; | grows down
+    133    000036              RSTACK_SIZE = 54   ; | RSTACK: top of return
+                                stack area. 
+    134    000000              
+    135    000000              ;          aligned buffers only required for
+                                terminal tasks.
+    136    000000              ; names    bytes  
+    137    000000                                 ; ^
+    138    000000                                 ; |
+    139    000000                                 ; | grows down
+    140    000022              HOLD_SIZE   = 34   ; | HOLDAREA: 
+    141    000000                                 ; -----
+    142    000054              PAD_SIZE    = 84   ; scratch pad
+    143    000000                                 ; -----
+    144    000054              TIB_SIZE    = 84   ; terminal input buffer
+    145    000000                                 ; -----
+    146    000000              
+    147    000000              ;        PUBLIC  UP,UAREA,PADAREA,LSTACK,PSTACK,
+                               RSTACK
+    148    000000                      PUBLIC  PADAREA,LSTACK,PSTACK,RSTACK,rte
+ st
+    149    000000                      PUBLIC  TIBAREA,ROMDICT ;VECAREA
+    150    000000                      PUBLIC  TIB_SIZE,UAREA_SIZE ;VECS_SIZE
+                                                                    ;HOLDAREA
+    151    000000                      EXTERN  lastword
+    152    000000                      
+    153    000000                        RSEG    DATA16_N  ; uninitialized RAM
+  segment
+    154    000000              
+    155    000000              ; UP:       DS16  1           ; User Pointer
+    156    000000              ; UAREA:    DS16  UAREA_SIZE  ; allocate user
+                                area. see: hilvl tabel for COLD
+    157    000000              ;          DS16  2  ; sicherheitzone
+    158    000000              
+    159    000000              rtest:    DS16  1
+    160    000002              LSTACK:                     ; start leave
+                                stack
+    161    000002                        DS16  PSTACK_SIZE ; allocate parameter
+                                                            stack
+    162    00006E              PSTACK:                     ; top of parameter
+                                stack
+    163    00006E                        DS16  RSTACK_SIZE ; allocate return
+                                                            stack 
+    164    0000DA              RSTACK:                     ; top of return
+                                stack 
+    165    0000DA                        DS8   HOLD_SIZE   ; allocate hold area
+                                                            
+    166    0000FC              HOLDAREA:                   ; top of hold adrea
+                                
+    167    0000FC              PADAREA:  DS8   PAD_SIZE    ; start scratch pad;
+                                                            must follow
+                                                            HOLDAREA
+    168    000150              TIBAREA:  DS8   TIB_SIZE    ; start Terminal
+                                                            Input Buffer
+    169    0001A4              
+    170    0001A4              ; ROMDICT moved to end of forth definitions,
+                                past lastword. See: core
+    171    0001A4              
+    172    0001A4              ; ----------------------------------------------
+                               ------------------------
+    173    0001A4              ; POWER ON RESET AND INITIALIZATION
+    174    0001A4              
+    175    0001A4              #include "msp430fr2033.h"                     ;
+                                #define controlled include file
+    176    0001A4              #include "CF430FRforth.h"                      ;
+                                header macros and register defs
+    177    0001A4              
+    178    0001A4              ;        NAME    reset        ; module
+                                name
+    179    000000                      PUBLIC  reset,main    ; make name
+                                                              visible outside
+                                                              this module
+    180    0001A4              
+    181    000000                      EXTERN  COLDIP,WARMIP,BOOTIP,cory,UAREA,
+ UP
+    182    0001A4              
+    183    000000                      RSEG    CODE          ; place program in
+  'CODE' segment
+    184    000000              
+    185    000000              ; ----------------------------------------------
+                               ------------------------
+    186    000000              ; MSP430FR5739 Initialize system (original:
+                                FR_EXP.lst)
+    187    000000              ; for MSP-EXP430FR5739 Experimenter's Board
+                                
+    188    000000              
+    189    000000              
+    190    000000              main:             ; Debugger requires the 'main'
+                                symbol. 
+    191    000000              reset:            ; forth requires the reset
+                                symbol.
+    192    000000              start_init:       ; I require the start_init
+                                symbol. ;-)
+    193    000000              
+    194    000000              ; WDTCTL = WDTPW + WDTHOLD;                 //
+                                Stop WDT  
+    195    000000 B240805A5C01     MOV.W   #0x5a80, &0x15c
+    196    000006                  
+    197    000006              ; Save system reset interrupt vector to forth
+                                user variable 'cor'.
+    198    000006 92425E01....     MOV.W   &SYSRSTIV, &cory  
+    199    00000C              ;    MOV.W   &cory,&SYSRSTIV   ; reset al
+                                pending interrupts ??
+    200    00000C              
+    201    00000C              ; DCOCLK: Internal digitally controlled
+                                oscillator (DCO). 
+    202    00000C              ; Startup clock system in max. DCO setting ~8MHz
+                                
+    203    00000C              ; This value is closer to 10MHz on untrimmed
+                                parts  
+    204    00000C              ; CSCTL0_H = 0xA5;                          //
+                                Unlock register
+    205    00000C F240A5006101     MOV.B   #0xa5, &0x161
+    206    000012              ; CSCTL1 |= DCOFSEL0 + DCOFSEL1;            //
+                                Set max. DCO setting
+    207    000012 B2D006006201     BIS.W   #0x6, &0x162
+    208    000018              ; CSCTL2 = SELA_1 + SELS_3 + SELM_3;        //
+                                set ACLK = vlo; MCLK = DCO
+    209    000018 B24033016401     MOV.W   #0x133, &0x164
+    210    00001E              ; CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;        //
+                                set all dividers 
+    211    00001E 82436601         MOV.W   #0x0, &0x166
+    212    000022              ; CSCTL0_H = 0x01;                          //
+                                Lock Register
+    213    000022 D2436101         MOV.B   #0x1, &0x161
+    214    000026              
+    215    000026              ; Turn off temp. 
+    216    000026              ; REFCTL0 |= REFTCOFF; 
+    217    000026 B2D2B001         BIS.W   #0x8, &0x1b0
+    218    00002A              ; REFCTL0 &= ~REFON;  
+    219    00002A 92C3B001         BIC.W   #0x1, &0x1b0
+    220    00002E              
+    221    00002E              ; Enable switches
+    222    00002E              ; P4.0 and P4.1 are configured as switches
+    223    00002E              ; Port 4 has only two pins    
+    224    00002E              ; P4OUT |= BIT0 +BIT1;                      //
+                                Configure pullup resistor  
+    225    00002E 7E400300         MOV.B   #0x3, R14
+    226    000032 C2DE2302         BIS.B   R14, &0x223
+    227    000036              ; P4DIR &= ~(BIT0 + BIT1);                  //
+                                Direction = input
+    228    000036 F2F0FC002502     AND.B   #0xfc, &0x225
+    229    00003C              ; P4REN |= BIT0 + BIT1;                     //
+                                Enable pullup resistor
+    230    00003C C2DE2702         BIS.B   R14, &0x227
+    231    000040              ; P4IES &= ~(BIT0+BIT1);                    //
+                                P4.0 Lo/Hi edge interrupt  
+    232    000040 F2F0FC003902     AND.B   #0xfc, &0x239
+    233    000046              ; P4IE = BIT0+BIT1;                         //
+                                P4.0 interrupt enabled
+    234    000046 C24E3B02         MOV.B   R14, &0x23b
+    235    00004A              ; P4IFG = 0;                                //
+                                P4 IFG cleared
+    236    00004A C2433D02         MOV.B   #0x0, &0x23d
+    237    00004E              
+    238    00004E              ; Enable LEDs
+    239    00004E              ; P3OUT &= ~(BIT6+BIT7+BIT5+BIT4);
+    240    00004E F2F00F002202     AND.B   #0xf, &0x222
+    241    000054              ; P3DIR |= BIT6+BIT7+BIT5+BIT4;
+    242    000054 F2D0F0002402     BIS.B   #0xf0, &0x224
+    243    00005A              ; PJOUT &= ~(BIT0+BIT1+BIT2+BIT3);
+    244    00005A B2F0F0FF2203     AND.W   #0xfff0, &0x322
+    245    000060              ; PJDIR |= BIT0 +BIT1+BIT2+BIT3;
+    246    000060 B2D00F002403     BIS.W   #0xf, &0x324
+    247    000066              
+    248    000066              ; Terminate Unused GPIOs
+    249    000066              ; P1.0 - P1.6 is unused
+    250    000066              ; P1OUT &= ~(BIT0 + BIT1 + BIT2 + BIT3 + BIT5 +
+                                BIT6 + BIT7);   
+    251    000066 F2F010000202     AND.B   #0x10, &0x202
+    252    00006C              ; P1DIR &= ~(BIT0 + BIT1 + BIT2 + BIT3 + BIT5 +
+                                BIT6 + BIT7); 
+    253    00006C F2F010000402     AND.B   #0x10, &0x204
+    254    000072              ; P1REN |= (BIT0 + BIT1 + BIT2 + BIT3 + BIT5 +
+                                BIT6 + BIT7);   
+    255    000072 F2D0EF000602     BIS.B   #0xef, &0x206
+    256    000078              ; P1.4 is used as input from NTC voltage
+                                divider
+    257    000078              ; Set it to output low
+    258    000078              ; P1OUT &= ~BIT4;      
+    259    000078 F2C010000202     BIC.B   #0x10, &0x202
+    260    00007E              ; P1DIR |= BIT4; 
+    261    00007E F2D010000402     BIS.B   #0x10, &0x204
+    262    000084              ; P2.2 - P2.6 is unused
+    263    000084              ; P2OUT &= ~(BIT2 + BIT3 + BIT4 + BIT5 + BIT6); 
+                                  
+    264    000084 F2F083000302     AND.B   #0x83, &0x203
+    265    00008A              ; P2DIR &= ~(BIT2 + BIT3 + BIT4 + BIT5 + BIT6);
+                                
+    266    00008A F2F083000502     AND.B   #0x83, &0x205
+    267    000090              ; P2REN |= (BIT2 + BIT3 + BIT4 + BIT5 + BIT6);  
+                                
+    268    000090 F2D07C000702     BIS.B   #0x7c, &0x207
+    269    000096              
+    270    000096              ; Configure UART pins P2.0 (UCA0TXD) & P2.1
+                                (UCA0RXD)
+    271    000096 F2D003000D02     BIS.B   #0x03, &0x20d  ; P2SEL1 |= BIT0 +
+                                                           BIT1; 
+    272    00009C F2F0FC000B02     AND.B   #0xfc, &0x20b  ; P2SEL0 &= ~(BIT0 +
+                                                           BIT1); 
+    273    0000A2              
+    274    0000A2              ;  Configure UART 0 (Dirk Bruehl) 
+    275    0000A2 D2D3C005         BIS.B   #0x01, &0x5c0    ; UCA0CTL1 |=
+                                                             UCSWRST 
+    276    0000A6 F2408000C005     MOV.B   #0x80, &0x5c0    ; UCA0CTL1  =
+                                                             UCSSEL_2  // Set
+                                                             SMCLK as UCLk
+                                                             
+    277    0000AC F2403400C605     MOV.B   #0x34, &0x5c6    ; UCA0BR0   = 52   
+                                                                 // 9600
+                                                             baud
+    278    0000B2                      ; 8000000/(9600*16) - INT(8000000/(9600*
+                               16))=0.083
+    279    0000B2 C243C705         MOV.B   #0x0, &0x5c7     ; UCA0BR1 = 0
+                                                             
+    280    0000B6                      ; UCBRFx = 1, UCBRSx = 0x49, UCOS16 = 1
+                                (Refer User Guide)
+    281    0000B6 B2401149C805     MOV.W   #0x4911, &0x5c8  ; UCA0MCTLW =
+                                                             0x4911 
+    282    0000BC D2C3C005         BIC.B   #0x01, &0x5c0    ; UCA0CTL1 &=
+                                                             ~UCSWRST  //
+                                                             release from
+                                                             reset
+    283    0000C0              
+    284    0000C0              ; P2.7 is used to power the voltage divider for
+                                the NTC thermistor
+    285    0000C0              ; P2OUT &= ~BIT7;     
+    286    0000C0 F2C080000302     BIC.B   #0x80, &0x203
+    287    0000C6              ; P2DIR |= BIT7; 
+    288    0000C6 F2D080000502     BIS.B   #0x80, &0x205
+    289    0000CC              
+    290    0000CC              ; P3.0,P3.1 and P3.2 are accelerometer
+                                inputs
+    291    0000CC              ; P3OUT &= ~(BIT0 + BIT1 + BIT2);   
+    292    0000CC F2F0F8002202     AND.B   #0xf8, &0x222
+    293    0000D2              ; P3DIR &= ~(BIT0 + BIT1 + BIT2); 
+    294    0000D2 F2F0F8002402     AND.B   #0xf8, &0x224
+    295    0000D8              ; P3REN |= BIT0 + BIT1 + BIT2;
+    296    0000D8 F2D007002602     BIS.B   #0x7, &0x226
+    297    0000DE              
+    298    0000DE              ; PJ.0,1,2,3 are used as LEDs
+    299    0000DE              ; crystal pins for XT1 are unused
+    300    0000DE              ; PJOUT &= ~(BIT4+BIT5);  
+    301    0000DE B2F0CFFF2203     AND.W   #0xffcf, &0x322
+    302    0000E4              ; PJDIR &= ~(BIT4+BIT5);
+    303    0000E4 B2F0CFFF2403     AND.W   #0xffcf, &0x324
+    304    0000EA              ; PJREN |= BIT4 + BIT5;  
+    305    0000EA B2D030002603     BIS.W   #0x30, &0x326
+    306    0000F0                  
+    307    0000F0              ; Forth register initialisation
+    308    0000F0 3140....         MOV     #RSTACK,SP              ; set up
+                                                                    return
+                                                                    stack
+    309    0000F4 3440....         MOV     #PSTACK,PSP             ; set up
+                                                                    parameter
+                                                                    stack
+    310    0000F8 B240........     MOV     #UAREA,&UP              ; initial
+                                                                    user
+                                                                    pointer
+    311    0000FE 3540....         MOV     #WARMIP,IP              ; set IP of
+                                                                    starting
+                                                                    word
+                                                                    
+    312    000102 0743             MOV     #0,TOS                  ; clear top
+                                                                    of
+                                                                    pstack
+    313    000104                  NEXT
+    313.1  000104 3645                 MOV @IP+,W      ; fetch word address
+                                                        into W
+    313.2  000106 3046                 MOV @W+,PC      ; fetch code address
+                                                        into PC, W=PFA
+    313.3  000108                      ENDM
+    314    000108                  
+    315    000108              init_end:
+    316    000108              
+    317    000108              ; ----------------------------------------------
+                               ------------------------
+    318    000108              ; DEFAULT INTERRUPT HANDLER
+    319    000000                       PUBLIC nullirq
+    320    000108              isr_start:
+    321    000108 0013         nullirq: RETI
+    322    00010A              isr_end:
+    323    00010A              
+    324    00010A              ROMDICT:
+    325    00010A                      END
+
+
+
+Segment             Type 	Mode
+----------------------------------------
+CODE                UNTYPED  	REL 
+DATA16_N            UNTYPED  	REL 
+
+Label               Mode   Type                   Segment    Value/Offset
+------------------------------------------------------------------------------
+ADCCTL0             ABS    CONST UNTYP.           ASEG       700 
+ADCCTL0_H           ABS    CONST UNTYP.           ASEG       701 
+ADCCTL0_L           ABS    CONST UNTYP.           ASEG       700 
+ADCCTL1             ABS    CONST UNTYP.           ASEG       702 
+ADCCTL1_H           ABS    CONST UNTYP.           ASEG       703 
+ADCCTL1_L           ABS    CONST UNTYP.           ASEG       702 
+ADCCTL2             ABS    CONST UNTYP.           ASEG       704 
+ADCCTL2_H           ABS    CONST UNTYP.           ASEG       705 
+ADCCTL2_L           ABS    CONST UNTYP.           ASEG       704 
+ADCHI               ABS    CONST UNTYP.           ASEG       708 
+ADCHI_H             ABS    CONST UNTYP.           ASEG       709 
+ADCHI_L             ABS    CONST UNTYP.           ASEG       708 
+ADCIE               ABS    CONST UNTYP.           ASEG       71A 
+ADCIE_H             ABS    CONST UNTYP.           ASEG       71B 
+ADCIE_L             ABS    CONST UNTYP.           ASEG       71A 
+ADCIFG              ABS    CONST UNTYP.           ASEG       71C 
+ADCIFG_H            ABS    CONST UNTYP.           ASEG       71D 
+ADCIFG_L            ABS    CONST UNTYP.           ASEG       71C 
+ADCIV               ABS    CONST UNTYP.           ASEG       71E 
+ADCIV_H             ABS    CONST UNTYP.           ASEG       71F 
+ADCIV_L             ABS    CONST UNTYP.           ASEG       71E 
+ADCLO               ABS    CONST UNTYP.           ASEG       706 
+ADCLO_H             ABS    CONST UNTYP.           ASEG       707 
+ADCLO_L             ABS    CONST UNTYP.           ASEG       706 
+ADCMCTL0            ABS    CONST UNTYP.           ASEG       70A 
+ADCMCTL0_H          ABS    CONST UNTYP.           ASEG       70B 
+ADCMCTL0_L          ABS    CONST UNTYP.           ASEG       70A 
+ADCMEM0             ABS    CONST UNTYP.           ASEG       712 
+ADCMEM0_H           ABS    CONST UNTYP.           ASEG       713 
+ADCMEM0_L           ABS    CONST UNTYP.           ASEG       712 
+BAKMEM0             ABS    CONST UNTYP.           ASEG       660 
+BAKMEM0_H           ABS    CONST UNTYP.           ASEG       661 
+BAKMEM0_L           ABS    CONST UNTYP.           ASEG       660 
+BAKMEM1             ABS    CONST UNTYP.           ASEG       662 
+BAKMEM10            ABS    CONST UNTYP.           ASEG       674 
+BAKMEM10_H          ABS    CONST UNTYP.           ASEG       675 
+BAKMEM10_L          ABS    CONST UNTYP.           ASEG       674 
+BAKMEM11            ABS    CONST UNTYP.           ASEG       676 
+BAKMEM11_H          ABS    CONST UNTYP.           ASEG       677 
+BAKMEM11_L          ABS    CONST UNTYP.           ASEG       676 
+BAKMEM12            ABS    CONST UNTYP.           ASEG       678 
+BAKMEM12_H          ABS    CONST UNTYP.           ASEG       679 
+BAKMEM12_L          ABS    CONST UNTYP.           ASEG       678 
+BAKMEM13            ABS    CONST UNTYP.           ASEG       67A 
+BAKMEM13_H          ABS    CONST UNTYP.           ASEG       67B 
+BAKMEM13_L          ABS    CONST UNTYP.           ASEG       67A 
+BAKMEM14            ABS    CONST UNTYP.           ASEG       67C 
+BAKMEM14_H          ABS    CONST UNTYP.           ASEG       67D 
+BAKMEM14_L          ABS    CONST UNTYP.           ASEG       67C 
+BAKMEM15            ABS    CONST UNTYP.           ASEG       67E 
+BAKMEM15_H          ABS    CONST UNTYP.           ASEG       67F 
+BAKMEM15_L          ABS    CONST UNTYP.           ASEG       67E 
+BAKMEM1_H           ABS    CONST UNTYP.           ASEG       663 
+BAKMEM1_L           ABS    CONST UNTYP.           ASEG       662 
+BAKMEM2             ABS    CONST UNTYP.           ASEG       664 
+BAKMEM2_H           ABS    CONST UNTYP.           ASEG       665 
+BAKMEM2_L           ABS    CONST UNTYP.           ASEG       664 
+BAKMEM3             ABS    CONST UNTYP.           ASEG       666 
+BAKMEM3_H           ABS    CONST UNTYP.           ASEG       667 
+BAKMEM3_L           ABS    CONST UNTYP.           ASEG       666 
+BAKMEM4             ABS    CONST UNTYP.           ASEG       668 
+BAKMEM4_H           ABS    CONST UNTYP.           ASEG       669 
+BAKMEM4_L           ABS    CONST UNTYP.           ASEG       668 
+BAKMEM5             ABS    CONST UNTYP.           ASEG       66A 
+BAKMEM5_H           ABS    CONST UNTYP.           ASEG       66B 
+BAKMEM5_L           ABS    CONST UNTYP.           ASEG       66A 
+BAKMEM6             ABS    CONST UNTYP.           ASEG       66C 
+BAKMEM6_H           ABS    CONST UNTYP.           ASEG       66D 
+BAKMEM6_L           ABS    CONST UNTYP.           ASEG       66C 
+BAKMEM7             ABS    CONST UNTYP.           ASEG       66E 
+BAKMEM7_H           ABS    CONST UNTYP.           ASEG       66F 
+BAKMEM7_L           ABS    CONST UNTYP.           ASEG       66E 
+BAKMEM8             ABS    CONST UNTYP.           ASEG       670 
+BAKMEM8_H           ABS    CONST UNTYP.           ASEG       671 
+BAKMEM8_L           ABS    CONST UNTYP.           ASEG       670 
+BAKMEM9             ABS    CONST UNTYP.           ASEG       672 
+BAKMEM9_H           ABS    CONST UNTYP.           ASEG       673 
+BAKMEM9_L           ABS    CONST UNTYP.           ASEG       672 
+BOOTIP              ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+CAPTIO0CTL          ABS    CONST UNTYP.           ASEG       2EE 
+CAPTIO0CTL_H        ABS    CONST UNTYP.           ASEG       2EF 
+CAPTIO0CTL_L        ABS    CONST UNTYP.           ASEG       2EE 
+COLDIP              ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+CRCDI               ABS    CONST UNTYP.           ASEG       1C0 
+CRCDIRB             ABS    CONST UNTYP.           ASEG       1C2 
+CRCDIRB_H           ABS    CONST UNTYP.           ASEG       1C3 
+CRCDIRB_L           ABS    CONST UNTYP.           ASEG       1C2 
+CRCDI_H             ABS    CONST UNTYP.           ASEG       1C1 
+CRCDI_L             ABS    CONST UNTYP.           ASEG       1C0 
+CRCINIRES           ABS    CONST UNTYP.           ASEG       1C4 
+CRCINIRES_H         ABS    CONST UNTYP.           ASEG       1C5 
+CRCINIRES_L         ABS    CONST UNTYP.           ASEG       1C4 
+CRCRESR             ABS    CONST UNTYP.           ASEG       1C6 
+CRCRESR_H           ABS    CONST UNTYP.           ASEG       1C7 
+CRCRESR_L           ABS    CONST UNTYP.           ASEG       1C6 
+CSCTL0              ABS    CONST UNTYP.           ASEG       180 
+CSCTL0_H            ABS    CONST UNTYP.           ASEG       181 
+CSCTL0_L            ABS    CONST UNTYP.           ASEG       180 
+CSCTL1              ABS    CONST UNTYP.           ASEG       182 
+CSCTL1_H            ABS    CONST UNTYP.           ASEG       183 
+CSCTL1_L            ABS    CONST UNTYP.           ASEG       182 
+CSCTL2              ABS    CONST UNTYP.           ASEG       184 
+CSCTL2_H            ABS    CONST UNTYP.           ASEG       185 
+CSCTL2_L            ABS    CONST UNTYP.           ASEG       184 
+CSCTL3              ABS    CONST UNTYP.           ASEG       186 
+CSCTL3_H            ABS    CONST UNTYP.           ASEG       187 
+CSCTL3_L            ABS    CONST UNTYP.           ASEG       186 
+CSCTL4              ABS    CONST UNTYP.           ASEG       188 
+CSCTL4_H            ABS    CONST UNTYP.           ASEG       189 
+CSCTL4_L            ABS    CONST UNTYP.           ASEG       188 
+CSCTL5              ABS    CONST UNTYP.           ASEG       18A 
+CSCTL5_H            ABS    CONST UNTYP.           ASEG       18B 
+CSCTL5_L            ABS    CONST UNTYP.           ASEG       18A 
+CSCTL6              ABS    CONST UNTYP.           ASEG       18C 
+CSCTL6_H            ABS    CONST UNTYP.           ASEG       18D 
+CSCTL6_L            ABS    CONST UNTYP.           ASEG       18C 
+CSCTL7              ABS    CONST UNTYP.           ASEG       18E 
+CSCTL7_H            ABS    CONST UNTYP.           ASEG       18F 
+CSCTL7_L            ABS    CONST UNTYP.           ASEG       18E 
+CSCTL8              ABS    CONST UNTYP.           ASEG       190 
+CSCTL8_H            ABS    CONST UNTYP.           ASEG       191 
+CSCTL8_L            ABS    CONST UNTYP.           ASEG       190 
+FRCTL0              ABS    CONST UNTYP.           ASEG       1A0 
+FRCTL0_H            ABS    CONST UNTYP.           ASEG       1A1 
+FRCTL0_L            ABS    CONST UNTYP.           ASEG       1A0 
+GCCTL0              ABS    CONST UNTYP.           ASEG       1A4 
+GCCTL0_H            ABS    CONST UNTYP.           ASEG       1A5 
+GCCTL0_L            ABS    CONST UNTYP.           ASEG       1A4 
+GCCTL1              ABS    CONST UNTYP.           ASEG       1A6 
+GCCTL1_H            ABS    CONST UNTYP.           ASEG       1A7 
+GCCTL1_L            ABS    CONST UNTYP.           ASEG       1A6 
+HOLDAREA            REL    CONST UNTYP.           DATA16_N   FC 
+HOLD_SIZE           ABS    CONST UNTYP.           ASEG       22 
+LSTACK              REL    CONST PUB UNTYP.       DATA16_N   2 
+P1IV                ABS    CONST UNTYP.           ASEG       20E 
+P2IV                ABS    CONST UNTYP.           ASEG       21E 
+PADAREA             REL    CONST PUB UNTYP.       DATA16_N   FC 
+PADIR               ABS    CONST UNTYP.           ASEG       204 
+PADIR_H             ABS    CONST UNTYP.           ASEG       205 
+PADIR_L             ABS    CONST UNTYP.           ASEG       204 
+PAD_SIZE            ABS    CONST UNTYP.           ASEG       54 
+PAIE                ABS    CONST UNTYP.           ASEG       21A 
+PAIES               ABS    CONST UNTYP.           ASEG       218 
+PAIES_H             ABS    CONST UNTYP.           ASEG       219 
+PAIES_L             ABS    CONST UNTYP.           ASEG       218 
+PAIE_H              ABS    CONST UNTYP.           ASEG       21B 
+PAIE_L              ABS    CONST UNTYP.           ASEG       21A 
+PAIFG               ABS    CONST UNTYP.           ASEG       21C 
+PAIFG_H             ABS    CONST UNTYP.           ASEG       21D 
+PAIFG_L             ABS    CONST UNTYP.           ASEG       21C 
+PAIN                ABS    CONST UNTYP.           ASEG       200 
+PAIN_H              ABS    CONST UNTYP.           ASEG       201 
+PAIN_L              ABS    CONST UNTYP.           ASEG       200 
+PAOUT               ABS    CONST UNTYP.           ASEG       202 
+PAOUT_H             ABS    CONST UNTYP.           ASEG       203 
+PAOUT_L             ABS    CONST UNTYP.           ASEG       202 
+PAREN               ABS    CONST UNTYP.           ASEG       206 
+PAREN_H             ABS    CONST UNTYP.           ASEG       207 
+PAREN_L             ABS    CONST UNTYP.           ASEG       206 
+PASEL0              ABS    CONST UNTYP.           ASEG       20A 
+PASEL0_H            ABS    CONST UNTYP.           ASEG       20B 
+PASEL0_L            ABS    CONST UNTYP.           ASEG       20A 
+PBDIR               ABS    CONST UNTYP.           ASEG       224 
+PBDIR_H             ABS    CONST UNTYP.           ASEG       225 
+PBDIR_L             ABS    CONST UNTYP.           ASEG       224 
+PBIN                ABS    CONST UNTYP.           ASEG       220 
+PBIN_H              ABS    CONST UNTYP.           ASEG       221 
+PBIN_L              ABS    CONST UNTYP.           ASEG       220 
+PBOUT               ABS    CONST UNTYP.           ASEG       222 
+PBOUT_H             ABS    CONST UNTYP.           ASEG       223 
+PBOUT_L             ABS    CONST UNTYP.           ASEG       222 
+PBREN               ABS    CONST UNTYP.           ASEG       226 
+PBREN_H             ABS    CONST UNTYP.           ASEG       227 
+PBREN_L             ABS    CONST UNTYP.           ASEG       226 
+PBSEL0              ABS    CONST UNTYP.           ASEG       22A 
+PBSEL0_H            ABS    CONST UNTYP.           ASEG       22B 
+PBSEL0_L            ABS    CONST UNTYP.           ASEG       22A 
+PCDIR               ABS    CONST UNTYP.           ASEG       244 
+PCDIR_H             ABS    CONST UNTYP.           ASEG       245 
+PCDIR_L             ABS    CONST UNTYP.           ASEG       244 
+PCIN                ABS    CONST UNTYP.           ASEG       240 
+PCIN_H              ABS    CONST UNTYP.           ASEG       241 
+PCIN_L              ABS    CONST UNTYP.           ASEG       240 
+PCOUT               ABS    CONST UNTYP.           ASEG       242 
+PCOUT_H             ABS    CONST UNTYP.           ASEG       243 
+PCOUT_L             ABS    CONST UNTYP.           ASEG       242 
+PCREN               ABS    CONST UNTYP.           ASEG       246 
+PCREN_H             ABS    CONST UNTYP.           ASEG       247 
+PCREN_L             ABS    CONST UNTYP.           ASEG       246 
+PCSEL0              ABS    CONST UNTYP.           ASEG       24A 
+PCSEL0_H            ABS    CONST UNTYP.           ASEG       24B 
+PCSEL0_L            ABS    CONST UNTYP.           ASEG       24A 
+PDDIR               ABS    CONST UNTYP.           ASEG       264 
+PDDIR_H             ABS    CONST UNTYP.           ASEG       265 
+PDDIR_L             ABS    CONST UNTYP.           ASEG       264 
+PDIN                ABS    CONST UNTYP.           ASEG       260 
+PDIN_H              ABS    CONST UNTYP.           ASEG       261 
+PDIN_L              ABS    CONST UNTYP.           ASEG       260 
+PDOUT               ABS    CONST UNTYP.           ASEG       262 
+PDOUT_H             ABS    CONST UNTYP.           ASEG       263 
+PDOUT_L             ABS    CONST UNTYP.           ASEG       262 
+PDREN               ABS    CONST UNTYP.           ASEG       266 
+PDREN_H             ABS    CONST UNTYP.           ASEG       267 
+PDREN_L             ABS    CONST UNTYP.           ASEG       266 
+PDSEL0              ABS    CONST UNTYP.           ASEG       26A 
+PDSEL0_H            ABS    CONST UNTYP.           ASEG       26B 
+PDSEL0_L            ABS    CONST UNTYP.           ASEG       26A 
+PM5CTL0             ABS    CONST UNTYP.           ASEG       130 
+PM5CTL0_H           ABS    CONST UNTYP.           ASEG       131 
+PM5CTL0_L           ABS    CONST UNTYP.           ASEG       130 
+PMMCTL0             ABS    CONST UNTYP.           ASEG       120 
+PMMCTL0_H           ABS    CONST UNTYP.           ASEG       121 
+PMMCTL0_L           ABS    CONST UNTYP.           ASEG       120 
+PMMCTL1             ABS    CONST UNTYP.           ASEG       122 
+PMMCTL1_H           ABS    CONST UNTYP.           ASEG       123 
+PMMCTL1_L           ABS    CONST UNTYP.           ASEG       122 
+PMMCTL2             ABS    CONST UNTYP.           ASEG       124 
+PMMCTL2_H           ABS    CONST UNTYP.           ASEG       125 
+PMMCTL2_L           ABS    CONST UNTYP.           ASEG       124 
+PMMIE               ABS    CONST UNTYP.           ASEG       12E 
+PMMIE_H             ABS    CONST UNTYP.           ASEG       12F 
+PMMIE_L             ABS    CONST UNTYP.           ASEG       12E 
+PMMIFG              ABS    CONST UNTYP.           ASEG       12A 
+PMMIFG_H            ABS    CONST UNTYP.           ASEG       12B 
+PMMIFG_L            ABS    CONST UNTYP.           ASEG       12A 
+PSTACK              REL    CONST PUB UNTYP.       DATA16_N   6E 
+PSTACK_SIZE         ABS    CONST UNTYP.           ASEG       36 
+ROMDICT             REL    CONST PUB UNTYP.       CODE       10A 
+RSTACK              REL    CONST PUB UNTYP.       DATA16_N   DA 
+RSTACK_SIZE         ABS    CONST UNTYP.           ASEG       36 
+RTCCNT              ABS    CONST UNTYP.           ASEG       3CC 
+RTCCNT_H            ABS    CONST UNTYP.           ASEG       3CD 
+RTCCNT_L            ABS    CONST UNTYP.           ASEG       3CC 
+RTCCTL              ABS    CONST UNTYP.           ASEG       3C0 
+RTCCTL_H            ABS    CONST UNTYP.           ASEG       3C1 
+RTCCTL_L            ABS    CONST UNTYP.           ASEG       3C0 
+RTCIV               ABS    CONST UNTYP.           ASEG       3C4 
+RTCIV_H             ABS    CONST UNTYP.           ASEG       3C5 
+RTCIV_L             ABS    CONST UNTYP.           ASEG       3C4 
+RTCMOD              ABS    CONST UNTYP.           ASEG       3C8 
+RTCMOD_H            ABS    CONST UNTYP.           ASEG       3C9 
+RTCMOD_L            ABS    CONST UNTYP.           ASEG       3C8 
+SFRIE1              ABS    CONST UNTYP.           ASEG       100 
+SFRIE1_H            ABS    CONST UNTYP.           ASEG       101 
+SFRIE1_L            ABS    CONST UNTYP.           ASEG       100 
+SFRIFG1             ABS    CONST UNTYP.           ASEG       102 
+SFRIFG1_H           ABS    CONST UNTYP.           ASEG       103 
+SFRIFG1_L           ABS    CONST UNTYP.           ASEG       102 
+SFRRPCR             ABS    CONST UNTYP.           ASEG       104 
+SFRRPCR_H           ABS    CONST UNTYP.           ASEG       105 
+SFRRPCR_L           ABS    CONST UNTYP.           ASEG       104 
+SYSBERRIV           ABS    CONST UNTYP.           ASEG       158 
+SYSBERRIV_H         ABS    CONST UNTYP.           ASEG       159 
+SYSBERRIV_L         ABS    CONST UNTYP.           ASEG       158 
+SYSBSLC             ABS    CONST UNTYP.           ASEG       142 
+SYSBSLC_H           ABS    CONST UNTYP.           ASEG       143 
+SYSBSLC_L           ABS    CONST UNTYP.           ASEG       142 
+SYSCFG0             ABS    CONST UNTYP.           ASEG       160 
+SYSCFG0_H           ABS    CONST UNTYP.           ASEG       161 
+SYSCFG0_L           ABS    CONST UNTYP.           ASEG       160 
+SYSCFG1             ABS    CONST UNTYP.           ASEG       162 
+SYSCFG1_H           ABS    CONST UNTYP.           ASEG       163 
+SYSCFG1_L           ABS    CONST UNTYP.           ASEG       162 
+SYSCFG2             ABS    CONST UNTYP.           ASEG       164 
+SYSCFG2_H           ABS    CONST UNTYP.           ASEG       165 
+SYSCFG2_L           ABS    CONST UNTYP.           ASEG       164 
+SYSCTL              ABS    CONST UNTYP.           ASEG       140 
+SYSCTL_H            ABS    CONST UNTYP.           ASEG       141 
+SYSCTL_L            ABS    CONST UNTYP.           ASEG       140 
+SYSJMBC             ABS    CONST UNTYP.           ASEG       146 
+SYSJMBC_H           ABS    CONST UNTYP.           ASEG       147 
+SYSJMBC_L           ABS    CONST UNTYP.           ASEG       146 
+SYSJMBI0            ABS    CONST UNTYP.           ASEG       148 
+SYSJMBI0_H          ABS    CONST UNTYP.           ASEG       149 
+SYSJMBI0_L          ABS    CONST UNTYP.           ASEG       148 
+SYSJMBI1            ABS    CONST UNTYP.           ASEG       14A 
+SYSJMBI1_H          ABS    CONST UNTYP.           ASEG       14B 
+SYSJMBI1_L          ABS    CONST UNTYP.           ASEG       14A 
+SYSJMBO0            ABS    CONST UNTYP.           ASEG       14C 
+SYSJMBO0_H          ABS    CONST UNTYP.           ASEG       14D 
+SYSJMBO0_L          ABS    CONST UNTYP.           ASEG       14C 
+SYSJMBO1            ABS    CONST UNTYP.           ASEG       14E 
+SYSJMBO1_H          ABS    CONST UNTYP.           ASEG       14F 
+SYSJMBO1_L          ABS    CONST UNTYP.           ASEG       14E 
+SYSRSTIV            ABS    CONST UNTYP.           ASEG       15E 
+SYSRSTIV_H          ABS    CONST UNTYP.           ASEG       15F 
+SYSRSTIV_L          ABS    CONST UNTYP.           ASEG       15E 
+SYSSNIV             ABS    CONST UNTYP.           ASEG       15C 
+SYSSNIV_H           ABS    CONST UNTYP.           ASEG       15D 
+SYSSNIV_L           ABS    CONST UNTYP.           ASEG       15C 
+SYSUNIV             ABS    CONST UNTYP.           ASEG       15A 
+SYSUNIV_H           ABS    CONST UNTYP.           ASEG       15B 
+SYSUNIV_L           ABS    CONST UNTYP.           ASEG       15A 
+TA0CCR0             ABS    CONST UNTYP.           ASEG       312 
+TA0CCR1             ABS    CONST UNTYP.           ASEG       314 
+TA0CCR2             ABS    CONST UNTYP.           ASEG       316 
+TA0CCTL0            ABS    CONST UNTYP.           ASEG       302 
+TA0CCTL1            ABS    CONST UNTYP.           ASEG       304 
+TA0CCTL2            ABS    CONST UNTYP.           ASEG       306 
+TA0CTL              ABS    CONST UNTYP.           ASEG       300 
+TA0EX0              ABS    CONST UNTYP.           ASEG       320 
+TA0IV               ABS    CONST UNTYP.           ASEG       32E 
+TA0R                ABS    CONST UNTYP.           ASEG       310 
+TA1CCR0             ABS    CONST UNTYP.           ASEG       352 
+TA1CCR1             ABS    CONST UNTYP.           ASEG       354 
+TA1CCR2             ABS    CONST UNTYP.           ASEG       356 
+TA1CCTL0            ABS    CONST UNTYP.           ASEG       342 
+TA1CCTL1            ABS    CONST UNTYP.           ASEG       344 
+TA1CCTL2            ABS    CONST UNTYP.           ASEG       346 
+TA1CTL              ABS    CONST UNTYP.           ASEG       340 
+TA1EX0              ABS    CONST UNTYP.           ASEG       360 
+TA1IV               ABS    CONST UNTYP.           ASEG       36E 
+TA1R                ABS    CONST UNTYP.           ASEG       350 
+TIBAREA             REL    CONST PUB UNTYP.       DATA16_N   150 
+TIB_SIZE            ABS    CONST PUB UNTYP.       ASEG       54 
+UAREA               ABS    CONST EXT [002] UNTYP. __EXTERNS  Solved Extern 
+UAREA_SIZE          ABS    CONST PUB UNTYP.       ASEG       10 
+UCA0ABCTL           ABS    CONST UNTYP.           ASEG       510 
+UCA0BRW             ABS    CONST UNTYP.           ASEG       506 
+UCA0BRW_H           ABS    CONST UNTYP.           ASEG       507 
+UCA0BRW_L           ABS    CONST UNTYP.           ASEG       506 
+UCA0CTLW0           ABS    CONST UNTYP.           ASEG       500 
+UCA0CTLW0_H         ABS    CONST UNTYP.           ASEG       501 
+UCA0CTLW0_L         ABS    CONST UNTYP.           ASEG       500 
+UCA0CTLW1           ABS    CONST UNTYP.           ASEG       502 
+UCA0CTLW1_H         ABS    CONST UNTYP.           ASEG       503 
+UCA0CTLW1_L         ABS    CONST UNTYP.           ASEG       502 
+UCA0IE              ABS    CONST UNTYP.           ASEG       51A 
+UCA0IE_H            ABS    CONST UNTYP.           ASEG       51B 
+UCA0IE_L            ABS    CONST UNTYP.           ASEG       51A 
+UCA0IFG             ABS    CONST UNTYP.           ASEG       51C 
+UCA0IFG_H           ABS    CONST UNTYP.           ASEG       51D 
+UCA0IFG_L           ABS    CONST UNTYP.           ASEG       51C 
+UCA0IRCTL           ABS    CONST UNTYP.           ASEG       512 
+UCA0IRCTL_H         ABS    CONST UNTYP.           ASEG       513 
+UCA0IRCTL_L         ABS    CONST UNTYP.           ASEG       512 
+UCA0IV              ABS    CONST UNTYP.           ASEG       51E 
+UCA0MCTLW           ABS    CONST UNTYP.           ASEG       508 
+UCA0MCTLW_H         ABS    CONST UNTYP.           ASEG       509 
+UCA0MCTLW_L         ABS    CONST UNTYP.           ASEG       508 
+UCA0RXBUF           ABS    CONST UNTYP.           ASEG       50C 
+UCA0RXBUF_H         ABS    CONST UNTYP.           ASEG       50D 
+UCA0RXBUF_L         ABS    CONST UNTYP.           ASEG       50C 
+UCA0STATW           ABS    CONST UNTYP.           ASEG       50A 
+UCA0TXBUF           ABS    CONST UNTYP.           ASEG       50E 
+UCA0TXBUF_H         ABS    CONST UNTYP.           ASEG       50F 
+UCA0TXBUF_L         ABS    CONST UNTYP.           ASEG       50E 
+UCB0ADDMASK         ABS    CONST UNTYP.           ASEG       55E 
+UCB0ADDMASK_H       ABS    CONST UNTYP.           ASEG       55F 
+UCB0ADDMASK_L       ABS    CONST UNTYP.           ASEG       55E 
+UCB0ADDRX           ABS    CONST UNTYP.           ASEG       55C 
+UCB0ADDRX_H         ABS    CONST UNTYP.           ASEG       55D 
+UCB0ADDRX_L         ABS    CONST UNTYP.           ASEG       55C 
+UCB0BRW             ABS    CONST UNTYP.           ASEG       546 
+UCB0BRW_H           ABS    CONST UNTYP.           ASEG       547 
+UCB0BRW_L           ABS    CONST UNTYP.           ASEG       546 
+UCB0CTLW0           ABS    CONST UNTYP.           ASEG       540 
+UCB0CTLW0_H         ABS    CONST UNTYP.           ASEG       541 
+UCB0CTLW0_L         ABS    CONST UNTYP.           ASEG       540 
+UCB0CTLW1           ABS    CONST UNTYP.           ASEG       542 
+UCB0CTLW1_H         ABS    CONST UNTYP.           ASEG       543 
+UCB0CTLW1_L         ABS    CONST UNTYP.           ASEG       542 
+UCB0I2COA0          ABS    CONST UNTYP.           ASEG       554 
+UCB0I2COA0_H        ABS    CONST UNTYP.           ASEG       555 
+UCB0I2COA0_L        ABS    CONST UNTYP.           ASEG       554 
+UCB0I2COA1          ABS    CONST UNTYP.           ASEG       556 
+UCB0I2COA1_H        ABS    CONST UNTYP.           ASEG       557 
+UCB0I2COA1_L        ABS    CONST UNTYP.           ASEG       556 
+UCB0I2COA2          ABS    CONST UNTYP.           ASEG       558 
+UCB0I2COA2_H        ABS    CONST UNTYP.           ASEG       559 
+UCB0I2COA2_L        ABS    CONST UNTYP.           ASEG       558 
+UCB0I2COA3          ABS    CONST UNTYP.           ASEG       55A 
+UCB0I2COA3_H        ABS    CONST UNTYP.           ASEG       55B 
+UCB0I2COA3_L        ABS    CONST UNTYP.           ASEG       55A 
+UCB0I2CSA           ABS    CONST UNTYP.           ASEG       560 
+UCB0I2CSA_H         ABS    CONST UNTYP.           ASEG       561 
+UCB0I2CSA_L         ABS    CONST UNTYP.           ASEG       560 
+UCB0IE              ABS    CONST UNTYP.           ASEG       56A 
+UCB0IE_H            ABS    CONST UNTYP.           ASEG       56B 
+UCB0IE_L            ABS    CONST UNTYP.           ASEG       56A 
+UCB0IFG             ABS    CONST UNTYP.           ASEG       56C 
+UCB0IFG_H           ABS    CONST UNTYP.           ASEG       56D 
+UCB0IFG_L           ABS    CONST UNTYP.           ASEG       56C 
+UCB0IV              ABS    CONST UNTYP.           ASEG       56E 
+UCB0RXBUF           ABS    CONST UNTYP.           ASEG       54C 
+UCB0RXBUF_H         ABS    CONST UNTYP.           ASEG       54D 
+UCB0RXBUF_L         ABS    CONST UNTYP.           ASEG       54C 
+UCB0STATW           ABS    CONST UNTYP.           ASEG       548 
+UCB0STATW_H         ABS    CONST UNTYP.           ASEG       549 
+UCB0STATW_L         ABS    CONST UNTYP.           ASEG       548 
+UCB0TBCNT           ABS    CONST UNTYP.           ASEG       54A 
+UCB0TBCNT_H         ABS    CONST UNTYP.           ASEG       54B 
+UCB0TBCNT_L         ABS    CONST UNTYP.           ASEG       54A 
+UCB0TXBUF           ABS    CONST UNTYP.           ASEG       54E 
+UCB0TXBUF_H         ABS    CONST UNTYP.           ASEG       54F 
+UCB0TXBUF_L         ABS    CONST UNTYP.           ASEG       54E 
+UP                  ABS    CONST EXT [003] UNTYP. __EXTERNS  Solved Extern 
+WARMIP              ABS    CONST EXT [000] UNTYP. __EXTERNS  Solved Extern 
+WDTCTL              ABS    CONST UNTYP.           ASEG       1CC 
+WDTCTL_H            ABS    CONST UNTYP.           ASEG       1CD 
+WDTCTL_L            ABS    CONST UNTYP.           ASEG       1CC 
+cory                ABS    CONST EXT [001] UNTYP. __EXTERNS  Solved Extern 
+init_end            REL    CONST UNTYP.           CODE       108 
+isr_end             REL    CONST UNTYP.           CODE       10A 
+isr_start           REL    CONST UNTYP.           CODE       108 
+lastword            ABS    CONST EXT [-001] UNTYP. __EXTERNS  Solved Extern 
+main                REL    CONST PUB UNTYP.       CODE       0 
+nullirq             REL    CONST PUB UNTYP.       CODE       108 
+reset               REL    CONST PUB UNTYP.       CODE       0 
+rtest               REL    CONST PUB UNTYP.       DATA16_N   0 
+start_init          REL    CONST UNTYP.           CODE       0 
+
+
+##############################
+#          CRC:4D3D          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#         Bytes: 266         #
+##############################
+
+
+
+

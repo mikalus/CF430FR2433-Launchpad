@@ -1,0 +1,45 @@
+; infoB user area tables
+
+        EXTERN lastword,ROMDICT,fenceadr,NOOP
+        EXTERN DOTVER 
+        PUBLIC initDECON,UP1,appA0,appA1,cory,ftest
+
+        RSEG    INFOB
+UP1:     DW 0
+        ; user area 
+        DW 0,0,16,0     ; reserved,>IN,BASE,STATE
+        DW ROMDICT      ; DP
+        DW 0,0          ; SOURCE init'd elsewhere
+        DW lastword     ; LATEST
+        DW 0,0          ; HP,LP init'd elsewhere; HP=Hold LP=leave stack pointer
+appA1:  DW DOTVER         ; is default app ;mk
+        DW 0            ; NEWEST not init'd
+        DW fenceadr     ; FENCE for FORGET
+        DW 0,0,0        ; user variables TBD
+
+cory:   DW 0   ; cause of reset; its a copy of SYSRSTIV done by init.
+ftest:  DW 0
+
+; ---------------------------------------------------------
+
+initDECON:  ; delivery condition of user area
+        DW 0,0,16,0     ; reserved,>IN,BASE,STATE
+        DW ROMDICT      ; DP
+        DW 0,0          ; SOURCE init'd elsewhere
+        DW lastword     ; LATEST
+        DW 0,0          ; HP,LP init'd elsewhere; HP=Hold LP=leave stack pointer
+appA0:  DW DOTVER         ; is default app ;mk
+        DW 0            ; NEWEST not init'd
+        DW fenceadr     ; FENCE for FORGET
+        DW 0,0,0        ; user variables TBD
+
+
+        PUBLIC  CFver,CFverend
+        EVEN
+CFver:  DB CFverend-1-CFver ;count
+        DB 'CF430FR2433 V0.2exp'
+CFverend:
+        
+
+
+END

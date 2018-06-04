@@ -1,0 +1,107 @@
+; Interrupt Vectors - MSP430FR5739  ; M.Kalus 25 jul 2011 22:42:50 
+
+; ----------------------------------------------------------------------
+; CamelForth for the Texas Instruments MSP430 
+; (c) 2009 Bradford J. Rodriguez.
+; 
+; This program is free software; you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation; either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;
+; Commercial inquiries should be directed to the author at 
+; 115 First St., #105, Collingwood, Ontario L9Y 4W3 Canada
+; or via email to bj@camelforth.com
+
+;mk ----------------------------------------------------------------------
+; The interrupt vectors and the power-up start address are located 
+; in the address range 0FFFFh to 0FF80h. The vector contains the 
+; 16-bit address of the appropriate interrupt-handler instruction sequence.
+
+        EXTERN nullirq
+        EXTERN reset
+        PUBLIC intvecs
+
+        RSEG SIGNATURE
+         DC16 0xFFFF ; $FF80  -  JTAG/SBW Signature at FF80h–FF83h. 
+         DC16 0xFFFF ; $FF82  -  JTAG/SBW Signature at FF80h–FF83h. 
+         DC16 0xFFFF ; $FF84  -  BSL Signature at FF84h–FF87h       
+         DC16 0xFFFF ; $FF86  -  BSL Signature at FF84h–FF87h       
+         
+
+        RSEG    INTVEC
+intvecs: ; -  reserved  FF88h-FFCDh = 45h &69 bytes
+                         ; 16-bit address 
+         DC16 nullirq    ; $FF88  -  reserved 
+         DC16 nullirq    ; $FF8A  -  reserved 
+         DC16 nullirq    ; $FF8C  -  reserved 
+         DC16 nullirq    ; $FF8E  -  reserved 
+         DC16 nullirq    ; $FF90  -  reserved 
+         DC16 nullirq    ; $FF92  -  reserved 
+         DC16 nullirq    ; $FF94  -  reserved 
+         DC16 nullirq    ; $FF96  -  reserved 
+         DC16 nullirq    ; $FF98  -  reserved 
+         DC16 nullirq    ; $FF9A  -  reserved 
+         DC16 nullirq    ; $FF9C  -  reserved 
+         DC16 nullirq    ; $FF9E  -  reserved 
+         DC16 nullirq    ; $FFA0  -  reserved 
+         DC16 nullirq    ; $FFA2  -  reserved 
+         DC16 nullirq    ; $FFA4  -  reserved 
+         DC16 nullirq    ; $FFA6  -  reserved 
+         DC16 nullirq    ; $FFA8  -  reserved 
+         DC16 nullirq    ; $FFAA  -  reserved 
+         DC16 nullirq    ; $FFAC  -  reserved 
+         DC16 nullirq    ; $FFAE  -  reserved 
+         DC16 nullirq    ; $FFB0  -  reserved 
+         DC16 nullirq    ; $FFB2  -  reserved 
+         DC16 nullirq    ; $FFB4  -  reserved 
+         DC16 nullirq    ; $FFB6  -  reserved 
+         DC16 nullirq    ; $FFB8  -  reserved 
+         DC16 nullirq    ; $FFBA  -  reserved 
+         DC16 nullirq    ; $FFBC  -  reserved 
+         DC16 nullirq    ; $FFBE  -  reserved 
+         DC16 nullirq    ; $FFC0  -  reserved 
+         DC16 nullirq    ; $FFC2  -  reserved 
+         DC16 nullirq    ; $FFC4  -  reserved 
+         DC16 nullirq    ; $FFC6  -  reserved 
+         DC16 nullirq    ; $FFC8  -  reserved 
+         DC16 nullirq    ; $FFCA  -  reserved 
+         DC16 nullirq    ; $FFCC  -  reserved 
+ 
+         DC16 nullirq    ; $FFCE  -  RTC_B 
+         DC16 nullirq    ; $FFD0  -  I/O Port 4 
+         DC16 nullirq    ; $FFD2  -  I/O Port 3 
+         DC16 nullirq    ; $FFD4  -  TB2_1 
+         DC16 nullirq    ; $FFD6  -  TB2_0 
+         DC16 nullirq    ; $FFD8  -  I/O Port P2 
+         DC16 nullirq    ; $FFDA  -  TB1_1 
+         DC16 nullirq    ; $FFDC  -  TB1_0 
+         DC16 nullirq    ; $FFDE  -  I/O Port P1 
+         DC16 nullirq    ; $FFE0  -  TA1_1 
+         DC16 nullirq    ; $FFE2  -  TA1_0 
+         DC16 nullirq    ; $FFE4  -  DMA 
+         DC16 nullirq    ; $FFE6  -  eUSCI_A1 rx,tx 
+         DC16 nullirq    ; $FFE8  -  TA0_1 
+         DC16 nullirq    ; $FFEA  -  TA0_0 
+         DC16 nullirq    ; $FFEC  -  ADC10_B 
+         DC16 nullirq    ; $FFEE  -  eUSCI_B0 rx,tx 
+         DC16 nullirq    ; $FFF0  -  eUSCI_A0 rx,tx 
+         DC16 nullirq    ; $FFF2  -  Watchdog 
+         DC16 nullirq    ; $FFF4  -  TB0_1 
+         DC16 nullirq    ; $FFF6  -  TB0_0 
+         DC16 nullirq    ; $FFF8  -  Comparator D 
+         DC16 nullirq    ; $FFFA  -  userNMI 
+         DC16 nullirq    ; $FFFC  -  sysNMI 
+         
+         RSEG    RESET                     
+         DC16 reset      ; $FFFE  -  reset 
+
+        END
